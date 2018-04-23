@@ -2,8 +2,6 @@
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base;
 
 MaxCameraY = 0;
-ledgeArr =[];
-counter = 0;
 
 var Game = {
     
@@ -15,8 +13,6 @@ var Game = {
     create: function(){
         //bg color
         game.stage.backgroundColor = "#4488AA";
-
-
         
         //scaling options
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -38,20 +34,22 @@ var Game = {
 
     update: function(){
          //setBounds(x, y, width, height)
-            //Updates the size of this world and sets World.x/y to the given values The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
-            // the y offset and the height of the world are adjusted
-            // to match the highest point the hero has reached
+            //Updates the size of this world and sets World.x/y to the given values
+            // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
+            // the y  and the height of the world are adjusted
+            // the higher the player goes the height of the world expands
     game.world.setBounds(0 ,-player.changingYPos,game.world.width  , game.world.height + player.changingYpos);
         
-
+        //the distance between camera.y and the hero
     game.camera.y = player.y - 300;
-
     
+        //this is how we store camera.y value to maxcameraY
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
     }
     
+        //if players y coordinate becomes more that the cameraslimit camera wont follow. this is how the camera would always go up 
     if(Math.abs(player.y - MaxCameraY) > 0)
     {
         game.camera.y = MaxCameraY;
@@ -61,8 +59,10 @@ var Game = {
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
+    //base Collision
     var hitBase = game.physics.arcade.collide(player,base);
 
+    //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height){
      
@@ -71,13 +71,7 @@ var Game = {
 
             ledge.x = game.rnd.integerInRange(0, game.world.width -50);
             ledge.y = yStorage ;
-          /*  yStorage = ledge.y - 300;
-            ledge.kill(); 
-           console.log( platformPool.countDead());
-           this.createNewLedge(game.rnd.integerInRange(0, game.world.width -50), yStorage - 100);*/
      } },this);
-
-  
 
 
      //movement
@@ -94,7 +88,6 @@ var Game = {
      }
      else
      {
-        
          player.body.velocity.x = 0;
          
      }
@@ -103,10 +96,8 @@ var Game = {
      if ( player.body.touching.down && hitPlatform || hitBase)
      {
          player.body.velocity.y = -200;
-          player.body.gravity.y = 200;
-         
+          player.body.gravity.y = 200;   
      }
-    
 
          // wrap world coordinated so that you can warp from left to right and right to left
         game.world.wrap(player,0,true,true,false);
@@ -114,10 +105,7 @@ var Game = {
         // track the maximum amount that the player has travelled
         player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
       
-
-        
     },
-    
 
     createPlayer: function(){
         player = game.add.sprite(game.world.centerX, game.world.height - 100, 'climber');
@@ -131,7 +119,9 @@ var Game = {
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
         player.body.checkCollision.right = false;
+        //starting y position
         player.startYPos = player.y ;
+        //to keep track of players Y
         player.changingYPos = 0;
     },
 
@@ -148,6 +138,7 @@ var Game = {
        platformPool = game.add.group();
        platformPool.enableBody = true;
 
+       //creating 10 
      for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
         var randomY = game.world.height -100 *i; 
