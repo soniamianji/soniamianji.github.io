@@ -1,7 +1,10 @@
 //global variables
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY;
+var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool;
 
 MaxCameraY = 0;
+ledgeArr =[];
+counter = 0;
+
 var Game = {
     
     
@@ -37,7 +40,15 @@ var Game = {
      
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
+
+         
         },
+
+    resurrect: function() {
+
+        
+        
+    },
 
 
 
@@ -46,29 +57,40 @@ var Game = {
             //Updates the size of this world and sets World.x/y to the given values The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
             // the y offset and the height of the world are adjusted
             // to match the highest point the hero has reached
-    game.world.setBounds(0 ,-player.changingYPos,game.world.width , game.world.height + player.changingYpos);
+    game.world.setBounds(0 ,-player.changingYPos,game.world.width  , game.world.height + player.changingYpos);
         
 
-    game.camera.y = player.y - 440;
+    game.camera.y = player.y - 300;
 
     
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
-
     }
     
-//console.log("current camera " + game.camera.y + " the max position " + MaxCameraY);
-
-    if(Math.abs(player.y - MaxCameraY) > 0){
+    if(Math.abs(player.y - MaxCameraY) > 0)
+    {
         game.camera.y = MaxCameraY;
       
     }
 
-
+    
+    
 
     //platform Collision
-    var hitPlatform = game.physics.arcade.collide(player, platforms);
+    var hitPlatform = game.physics.arcade.collide(player, platformPool);
+
+    platformPool.forEachAlive(function(el){
+        var platformYMin = el.y;
+        if(el.inCamera == false){
+            el.kill(); 
+     } },this);
+    
+  
+    console.log(platformPool.countDead());
+
+
+
 
      //movement
      if (cursors.left.isDown)
@@ -99,61 +121,81 @@ var Game = {
       
 
          // wrap world coordinated so that you can warp from left to right and right to left
-        game.world.wrap( player,0,true,true,false );
-
+        game.world.wrap(player,0,true,true,false);
+        
     // track the maximum amount that the player has travelled
         player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
        
+       
 
     },
 
+    shutdown: function() {
+        // reset everything, or the world will be messed up
+        game.world.setBounds( 0, 0, this.game.width, this.game.height );
+        game.cursor = null;
+        game.player.destroy();
+        game.player = null;
+        game.platformPool.destroy();
+        game.platformPool = null;
+      },
+
     createPlayer: function(){
         player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
-         //  We need to enable physics on the player
-         game.physics.arcade.enable(player);
 
+        //  We need to enable physics on the player
+        game.physics.arcade.enable(player);
+        player.anchor.setTo(0.5,0,5);
         player.body.bounce.y = 0.2;
         player.body.gravity.y = 300;
-        player.body.collideWorldBounds = true;
+        player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
         player.body.checkCollision.right = false;
-        player.body.
         player.startYPos = player.y ;
         player.changingYPos = 0;
     },
 
     generatePlatforms: function(){
         //grouping the platforms
-     platforms = game.add.group();
+     platformPool = game.add.group();
 
      //  We will enable physics for any object that is created in this group
-     platforms.enableBody = true;
+     platformPool.enableBody = true;
      //platforms.createMultiple('10', 'ground');
 
-     var ground = platforms.create(0, game.world.height -32 ,'ground' );
+     var ground = game.add.sprite(0, game.world.height -32 ,'ground' );
+     platformPool.add(ground);
      ground.scale.setTo(3,2);
      ground.body.immovable = true;
-     this.createLedge();
-     
+    
 
-    
+     for (var i= 0; i < 9; i++){
+         counter++;
+        var randomX =game.rnd.integerInRange(0, game.world.width -50);
+        var randomY = game.world.height -100 *i; 
+        ledge =  game.add.sprite(randomX,randomY,'ground');
+        platformPool.add(ledge);
+        ledge.scale.setTo(0.3,0.3);
+        ledge.body.immovable =true;
+       
+        //ledge.checkWorldBounds = true;
+        //ledge.outOfBoundsKill = true;   
+
+     }
+   
     },
-    
-    
-    createLedge: function(){
-        for (var i= 0; i < 9; i++){
-            var randomX =game.rnd.integerInRange(0, game.world.width -50);
-            var randomY = game.world.height -100 -100 *i; 
-            ledge =  platforms.create(randomX,randomY,'ground');
-            ledge.scale.setTo(0.3,0.3);
-            ledge.body.immovable =true;
-           /* if (ledge.y  > MaxCameraY){
-                ledge.kill();
-                
-            }*/
-        }
+
+
+   /*
+    regenerateLedge: function(){
+    var ledge = platformPool.getFirstDead();
+        console.log('heya');
+        ledge.revive();
+        var randomX =game.rnd.integerInRange(0, game.world.width -50);
+        var randomY = game.world.height -100 ; 
+        ledge.reset(randomX,randomY);
     }
 
 
@@ -161,16 +203,13 @@ var Game = {
         var randomX =Math.floor(Math.random()* 300 - 50); 
         var randomY =Math.floor(Math.random()* 500 - 100-100 * i); 
        this.createLedge(randomX, randomY, 50) ;  }
-  },
+  },*/
 
-  createLedge: function(x,y,width){
-    var platform = platform.getFirstDead();
-    platform.reset(x,y);
-    platform.scale.x = width;
-    platform.scale.y = 10;
-    platform.body.immovable =true;
-    return platform;*/
-
+  createNewLedge: function(x,y){
+    var newLedge = platformPool.getFirstDead();
+    newLedge.revive();
+    newLedge.scale.setTo(0.5,0.5);
+}
 
 
 };
