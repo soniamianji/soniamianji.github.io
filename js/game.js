@@ -8,8 +8,7 @@ counter = 0;
 var Game = {
     
     preload: function(){
-        game.load.spritesheet('player', './assets/images/player.png', 32,48);
-        game.load.image('ground', './assets/images/ground.png');
+        game.load.spritesheet('climber', './assets/images/climber.png');
         game.load.image('base', './assets/images/base.png')
     },
 
@@ -103,8 +102,8 @@ var Game = {
       //Allow the player to jump if they are touching the ground.
      if ( player.body.touching.down && hitPlatform || hitBase)
      {
-         player.body.velocity.y = -300;
-          player.body.gravity.y = 300;
+         player.body.velocity.y = -200;
+          player.body.gravity.y = 200;
          
      }
     
@@ -112,7 +111,7 @@ var Game = {
          // wrap world coordinated so that you can warp from left to right and right to left
         game.world.wrap(player,0,true,true,false);
         
-    // track the maximum amount that the player has travelled
+        // track the maximum amount that the player has travelled
         player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
       
 
@@ -121,13 +120,13 @@ var Game = {
     
 
     createPlayer: function(){
-        player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
+        player = game.add.sprite(game.world.centerX, game.world.height - 100, 'climber');
 
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
-        player.body.bounce.y = 0.2;
-        player.body.gravity.y = 300;
+        player.scale.setTo(0.2,0.2);
+        player.body.gravity.y = 500;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
@@ -152,20 +151,15 @@ var Game = {
      for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
         var randomY = game.world.height -100 *i; 
-        ledge =  game.add.sprite(randomX,randomY,'ground');
+        ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
-        ledge.scale.setTo(0.3,0.3);
+        ledge.scale.setTo(0.1,0.1);
         ledge.body.immovable = true;
+        ledge.width =50;
      }
    
     },
 
-
-  createNewLedge: function(x,y){
-    var ledge = platformPool.getFirstDead();
-    ledge.reset(x,y);
-    ledge.scale.setTo(0.3,0.3);
-}
 
 
 };
