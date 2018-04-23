@@ -1,5 +1,5 @@
 //global variables
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool;
+var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base;
 
 MaxCameraY = 0;
 ledgeArr =[];
@@ -7,21 +7,15 @@ counter = 0;
 
 var Game = {
     
-    
     preload: function(){
-        game.load.image('background', './assets/images/bg.jpg');
         game.load.spritesheet('player', './assets/images/player.png', 32,48);
         game.load.image('ground', './assets/images/ground.png');
+        game.load.image('base', './assets/images/base.png')
     },
 
     create: function(){
-      
-       // var minPlatformY = 99999;
-
-        //adding bg 
-        background =  game.add.sprite(game.world.centerX,game.world.centerY,'background');
-        background.anchor.setTo(0.5);
-        background.scale.setTo(3);
+        //bg color
+        game.stage.backgroundColor = "#4488AA";
 
 
         
@@ -35,20 +29,11 @@ var Game = {
           //physic enabled
         game.physics.startSystem(Phaser.Physics.ARCADE);
         this.generatePlatforms();
-
         this.createPlayer();
      
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-
-         
         },
-
-    resurrect: function() {
-
-        
-        
-    },
 
 
 
@@ -74,22 +59,26 @@ var Game = {
       
     }
 
-    
-    
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
+    var hitBase = game.physics.arcade.collide(player,base);
 
-    platformPool.forEachAlive(function(el){
-        var platformYMin = el.y;
-        if(el.inCamera == false){
-            el.kill(); 
+    platformPool.forEachAlive(function(ledge){
+        if( ledge.y >= game.camera.y+game.camera.height){
+     
+            yStorage = ledge.y - 600;
+            console.log(yStorage);
+
+            ledge.x = game.rnd.integerInRange(0, game.world.width -50);
+            ledge.y = yStorage ;
+          /*  yStorage = ledge.y - 300;
+            ledge.kill(); 
+           console.log( platformPool.countDead());
+           this.createNewLedge(game.rnd.integerInRange(0, game.world.width -50), yStorage - 100);*/
      } },this);
-    
+
   
-    console.log(platformPool.countDead());
-
-
 
 
      //movement
@@ -106,40 +95,30 @@ var Game = {
      }
      else
      {
-         
+        
          player.body.velocity.x = 0;
          
      }
      
       //Allow the player to jump if they are touching the ground.
-     if ( player.body.touching.down && hitPlatform)
+     if ( player.body.touching.down && hitPlatform || hitBase)
      {
          player.body.velocity.y = -300;
           player.body.gravity.y = 300;
          
      }
-      
+    
 
          // wrap world coordinated so that you can warp from left to right and right to left
         game.world.wrap(player,0,true,true,false);
         
     // track the maximum amount that the player has travelled
         player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
+      
 
-       
-       
-
+        
     },
-
-    shutdown: function() {
-        // reset everything, or the world will be messed up
-        game.world.setBounds( 0, 0, this.game.width, this.game.height );
-        game.cursor = null;
-        game.player.destroy();
-        game.player = null;
-        game.platformPool.destroy();
-        game.platformPool = null;
-      },
+    
 
     createPlayer: function(){
         player = game.add.sprite(game.world.centerX, game.world.height - 100, 'player');
@@ -158,57 +137,34 @@ var Game = {
     },
 
     generatePlatforms: function(){
-        //grouping the platforms
-     platformPool = game.add.group();
-
-     //  We will enable physics for any object that is created in this group
-     platformPool.enableBody = true;
-     //platforms.createMultiple('10', 'ground');
-
-     var ground = game.add.sprite(0, game.world.height -32 ,'ground' );
-     platformPool.add(ground);
-     ground.scale.setTo(3,2);
-     ground.body.immovable = true;
     
+       //starting point, 
+       base = game.add.sprite(0,game.world.height -50,'base');
+       base.scale.setTo(0.4,0.4);
+       game.physics.arcade.enable(base);
+       base.body.immovable =true;
 
-     for (var i= 0; i < 9; i++){
-         counter++;
+
+        //grouping the platforms
+       platformPool = game.add.group();
+       platformPool.enableBody = true;
+
+     for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
         var randomY = game.world.height -100 *i; 
         ledge =  game.add.sprite(randomX,randomY,'ground');
         platformPool.add(ledge);
         ledge.scale.setTo(0.3,0.3);
-        ledge.body.immovable =true;
-       
-        //ledge.checkWorldBounds = true;
-        //ledge.outOfBoundsKill = true;   
-
+        ledge.body.immovable = true;
      }
    
     },
 
 
-   /*
-    regenerateLedge: function(){
-    var ledge = platformPool.getFirstDead();
-        console.log('heya');
-        ledge.revive();
-        var randomX =game.rnd.integerInRange(0, game.world.width -50);
-        var randomY = game.world.height -100 ; 
-        ledge.reset(randomX,randomY);
-    }
-
-
-    /* for (var i=0; i < 9; i++){
-        var randomX =Math.floor(Math.random()* 300 - 50); 
-        var randomY =Math.floor(Math.random()* 500 - 100-100 * i); 
-       this.createLedge(randomX, randomY, 50) ;  }
-  },*/
-
   createNewLedge: function(x,y){
-    var newLedge = platformPool.getFirstDead();
-    newLedge.revive();
-    newLedge.scale.setTo(0.5,0.5);
+    var ledge = platformPool.getFirstDead();
+    ledge.reset(x,y);
+    ledge.scale.setTo(0.3,0.3);
 }
 
 
