@@ -1,17 +1,14 @@
 //global variables
 
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base, spring, spring_collapsed, stonesPool;
+var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base, spring, spring_collapsed, stonesPool,flames;
 var hitSpring = false;
-
-
-
-
 MaxCameraY = 0;
 
 var Game = {
 
     preload: function(){
         game.load.spritesheet('climber', './assets/images/climber.png');
+        game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
         game.load.image('base', './assets/images/base.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
@@ -21,6 +18,9 @@ var Game = {
     create: function(){
         //bg color
         game.stage.backgroundColor = "#4488AA";
+
+        
+
 
         //scaling options
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -35,6 +35,12 @@ var Game = {
         this.createPlayer();
         //createStones
         this.generateStones();
+
+        flames = game.add.sprite(0, 400, 'flames');
+        flames.scale.setTo(0.5);
+        flames.animations.add('fire', [0,1,2], 3, true);
+        flames.animations.play('fire');
+        flames.fixedToCamera = true;
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
@@ -74,7 +80,7 @@ var Game = {
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
     //base Collision
-    var hitBase = game.physics.arcade.collide(player,base);
+    //var hitBase = game.physics.arcade.collide(player,base);
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
 
@@ -124,11 +130,11 @@ var Game = {
      }
 
       //Allow the player to jump if they are touching the ground.
-     if ( player.body.touching.down && hitPlatform || hitBase)
+     if ( player.body.touching.down && hitPlatform /*|| hitBase*/)
      {
 
-         player.body.velocity.y = -200;
-         player.body.gravity.y = 200;
+         player.body.velocity.y = -300;
+         player.body.gravity.y = 300;
      }
 
      // wrap world coordinated so that you can warp from left to right and right to left
@@ -141,7 +147,7 @@ var Game = {
     },
 
     createPlayer: function(){
-        player = game.add.sprite(game.world.centerX, game.world.height - 100, 'climber');
+        player = game.add.sprite(game.world.centerX, game.world.height - 300, 'climber');
 
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
@@ -161,10 +167,10 @@ var Game = {
     generatePlatforms: function(){
 
        //starting point,
-       base = game.add.sprite(0,game.world.height -50,'base');
+      /* base = game.add.sprite(0,game.world.height -50,'flames');
        base.scale.setTo(0.4,0.4);
        game.physics.arcade.enable(base);
-       base.body.immovable =true;
+       base.body.immovable =true;*/
 
 
         //grouping the platforms
