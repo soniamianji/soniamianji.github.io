@@ -1,5 +1,5 @@
 //global variables
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base;
+var player, platfroms,cursors, ledge,MaxCameraY,platformPool,yStorage,base;
 
 MaxCameraY = 0;
 
@@ -78,13 +78,13 @@ var Game = {
      if (cursors.left.isDown)
      {
          //  Move to the left
-        player.body.velocity.x = -150;
+        player.body.velocity.x = -250;
  
      }
      else if (cursors.right.isDown)
      {
          //  Move to the right
-         player.body.velocity.x = 150;
+         player.body.velocity.x = 250;
      }
      else
      {
@@ -95,14 +95,16 @@ var Game = {
       //Allow the player to jump if they are touching the ground.
      if ( player.body.touching.down && hitPlatform || hitBase)
      {
-         player.body.velocity.y = -200;
-          player.body.gravity.y = 200;   
+         player.body.velocity.y = -300;
+          player.body.gravity.y = 300;   
      }
 
          // wrap world coordinated so that you can warp from left to right and right to left
         game.world.wrap(player,0,true,true,false);
         
-        // track the maximum amount that the player has travelled
+        // track the maximum amount that the player has travelled    //score gotta be according to that
+        //math.max returns the highest value(a,b)
+        
         player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
       
     },
@@ -114,7 +116,7 @@ var Game = {
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
         player.scale.setTo(0.2,0.2);
-        player.body.gravity.y = 500;
+        player.body.gravity.y = 300;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
