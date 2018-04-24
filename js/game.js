@@ -1,6 +1,11 @@
 //global variables
+
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base, spring, spring_collapsed, stonesPool;
 var hitSpring = false;
+
+
+
+
 MaxCameraY = 0;
 
 var Game = {
@@ -101,13 +106,16 @@ var Game = {
      if (cursors.left.isDown)
      {
          //  Move to the left
-        player.body.velocity.x = -150;
 
+        player.body.velocity.x = -250;
+
+
+       
      }
      else if (cursors.right.isDown)
      {
          //  Move to the right
-         player.body.velocity.x = 150;
+         player.body.velocity.x = 250;
      }
      else
      {
@@ -118,6 +126,7 @@ var Game = {
       //Allow the player to jump if they are touching the ground.
      if ( player.body.touching.down && hitPlatform || hitBase)
      {
+
          player.body.velocity.y = -200;
          player.body.gravity.y = 200;
      }
@@ -128,6 +137,7 @@ var Game = {
       // track the maximum amount that the player has travelled
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
+
     },
 
     createPlayer: function(){
@@ -137,7 +147,7 @@ var Game = {
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
         player.scale.setTo(0.2,0.2);
-        player.body.gravity.y = 500;
+        player.body.gravity.y = 300;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
