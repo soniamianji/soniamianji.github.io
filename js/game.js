@@ -1,6 +1,7 @@
 //global variables
 
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base, spring, spring_collapsed, stonesPool,flames;
+var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
+ spring, spring_collapsed, stonesPool,flames,jump, collect, spring;
 var hitSpring = false;
 MaxCameraY = 0;
 
@@ -13,14 +14,19 @@ var Game = {
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
         game.load.image('stone_red', './assets/images/stone_red.png');
+        game.load.audio('jump', './assets/sounds/jump.mp3')
+        game.load.audio('collect', './assets/sounds/collect.mp3')
+        game.load.audio('spring', './assets/sounds/springSound.mp3')
+
+
     },
 
     create: function(){
         //bg color
         game.stage.backgroundColor = "#4488AA";
-
-        
-
+        jump = game.add.audio('jump');
+        collect = game.add.audio('collect');
+        springSound = game.add.audio('spring');
 
         //scaling options
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -33,6 +39,7 @@ var Game = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         this.generatePlatforms();
         this.createPlayer();
+
         //createStones
         this.generateStones();
 
@@ -77,8 +84,13 @@ var Game = {
     }
     //stone checkCollision
     var hitStone = 	game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
+    if (hitStone)
+    {
+        collect.play();
+    }
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
+    
     //base Collision
     //var hitBase = game.physics.arcade.collide(player,base);
     //spring Collision
@@ -89,6 +101,7 @@ var Game = {
       //set the velocity to let the player jump higher
       player.body.velocity.y = -600;
       player.body.gravity.y = 400;
+      springSound.play();
       //this.collapseSpring();
     };
 
@@ -130,11 +143,13 @@ var Game = {
      }
 
       //Allow the player to jump if they are touching the ground.
-     if ( player.body.touching.down && hitPlatform /*|| hitBase*/)
+     if ( player.body.touching.down && (!hitSpring) && hitPlatform /*|| hitBase*/)
      {
 
          player.body.velocity.y = -300;
          player.body.gravity.y = 300;
+           jump.play();
+
      }
 
      // wrap world coordinated so that you can warp from left to right and right to left
