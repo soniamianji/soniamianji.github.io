@@ -23,7 +23,7 @@ var Game = {
 
     create: function(){
         //bg color
-        game.stage.backgroundColor = "#4488AA";
+        game.stage.backgroundColor = "#e8c11c";
         jump = game.add.audio('jump');
         collect = game.add.audio('collect');
         springSound = game.add.audio('spring');
