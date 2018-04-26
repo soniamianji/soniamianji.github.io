@@ -9,6 +9,7 @@ var Game = {
 
     preload: function(){
         game.load.spritesheet('climber', './assets/images/climber.png');
+        game.load.spritesheet('trump','./assets/images/finaltrump.png', 290,416,12);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
         game.load.image('base', './assets/images/base.png');
         game.load.image('spring', './assets/images/spring.png');
@@ -127,6 +128,7 @@ var Game = {
          //  Move to the left
 
         player.body.velocity.x = -250;
+        player.animations.play('left');
 
 
        
@@ -135,6 +137,7 @@ var Game = {
      {
          //  Move to the right
          player.body.velocity.x = 250;
+         player.animations.play('right');
      }
      else
      {
@@ -162,7 +165,9 @@ var Game = {
     },
 
     createPlayer: function(){
-        player = game.add.sprite(game.world.centerX, game.world.height - 300, 'climber');
+        player = game.add.sprite(game.world.centerX, game.world.height - 300, 'trump');
+        player.animations.add('right',[2,3],false);
+        player.animations.add('left',[9,8],false);
 
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
