@@ -11,7 +11,8 @@ game.state.add('Menu', Menu);
 
 game.state.add('Game', Game);
 
-game.state.add('GameOver', GameOver);
-
 game.state.start('Menu');
+
+game.state.add('gameover', gameover);
+
 

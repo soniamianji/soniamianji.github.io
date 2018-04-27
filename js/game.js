@@ -169,8 +169,10 @@ var Game = {
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
      {
          //gameOver
-         this.state.start('GameOver');
-         console.log("dead");
+         this.state.start('gameover');
+         bgMusic.stop();
+         
+         console.log("hello");
      }
     },
 
