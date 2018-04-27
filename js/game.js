@@ -171,8 +171,7 @@ var Game = {
          //gameOver
          this.state.start('gameover');
          bgMusic.stop();
-         
-         console.log("hello");
+
      }
     },
 
