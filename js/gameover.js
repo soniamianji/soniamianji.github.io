@@ -1,16 +1,15 @@
-//It shows gameover.png and displays your last score. When it is clicked you transition to the Game state.
 
-var Game_Over = {
+var GameOver = {
 
     preload : function() {
         // Load the needed image for this game screen.
-        game.load.image('gameover', './assets/images/gameover.png');
+        game.load.image('GameOver', './assets/images/gameover.png');
     },
 
     create : function() {
 
         // Create button to start game like in Menu.
-        this.add.button(0, 0, 'gameover', this.startGame, this);
+        this.add.button(0, 0, 'GameOver', this.startGame, this);
 
       
 

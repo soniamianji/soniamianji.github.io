@@ -1,23 +1,23 @@
 //global variables
 
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
- spring, spring_collapsed, stonesPool,flames,jump, collect, spring;
+ spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic;
 var hitSpring = false;
 MaxCameraY = 0;
 
 var Game = {
 
     preload: function(){
-        game.load.spritesheet('climber', './assets/images/climber.png');
         game.load.spritesheet('trump','./assets/images/finaltrump.png', 290,416,12);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
         game.load.image('base', './assets/images/base.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
         game.load.image('stone_red', './assets/images/stone_red.png');
-        game.load.audio('jump', './assets/sounds/jump.mp3')
-        game.load.audio('collect', './assets/sounds/collect.mp3')
-        game.load.audio('spring', './assets/sounds/springSound.mp3')
+        game.load.audio('jump', './assets/sounds/jump.mp3');
+        game.load.audio('collect', './assets/sounds/collect.mp3');
+        game.load.audio('springSound', './assets/sounds/springSound.mp3');
+        game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
 
 
     },
@@ -27,7 +27,9 @@ var Game = {
         game.stage.backgroundColor = "#e8c11c";
         jump = game.add.audio('jump');
         collect = game.add.audio('collect');
-        springSound = game.add.audio('spring');
+        springSound = game.add.audio('springSound');
+        bgMusic = game.add.audio('bgMusic');
+        bgMusic.play();
 
         //scaling options
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -69,7 +71,7 @@ var Game = {
     game.world.setBounds(0 ,-player.changingYPos,game.world.width  , game.world.height + player.changingYpos);
 
         //the distance between camera.y and the hero
-    game.camera.y = player.y - 300;
+    game.camera.y = player.y - 200;
 
         //this is how we store camera.y value to maxcameraY
     if (game.camera.y < MaxCameraY)
@@ -89,11 +91,14 @@ var Game = {
     {
         collect.play();
     }
+
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
     
-    //base Collision
-    //var hitBase = game.physics.arcade.collide(player,base);
+
+    //fire collosion
+    fallInTheFire = game.physics.arcade.collide(player,flames);
+
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
 
@@ -161,7 +166,12 @@ var Game = {
       // track the maximum amount that the player has travelled
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
-
+     if (player.y > game.camera.y + game.camera.height || fallInTheFire)
+     {
+         //gameOver
+         this.state.start('GameOver');
+         console.log("dead");
+     }
     },
 
     createPlayer: function(){
