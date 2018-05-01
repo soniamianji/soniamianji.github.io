@@ -62,7 +62,7 @@ var Game = {
 
       //generate Springs
       this.generateSpring();
-
+      
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
             // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
@@ -102,7 +102,7 @@ var Game = {
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
 
-    //if the player hits the spring to that
+    //if the player hits the spring
     if (hitSpring) {
       //set the velocity to let the player jump higher
       player.body.velocity.y = -600;
@@ -164,6 +164,8 @@ var Game = {
      game.world.wrap(player,0,true,true,false);
 
       // track the maximum amount that the player has travelled
+      //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
+      //the last stored changinypos, and we set the changing y pos 
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
@@ -196,13 +198,6 @@ var Game = {
     },
 
     generatePlatforms: function(){
-
-       //starting point,
-      /* base = game.add.sprite(0,game.world.height -50,'flames');
-       base.scale.setTo(0.4,0.4);
-       game.physics.arcade.enable(base);
-       base.body.immovable =true;*/
-
 
         //grouping the platforms
        platformPool = game.add.group();
