@@ -14,22 +14,15 @@ var gameover = {
        var sound = this.add.audio('GOSound');
        sound.play();
 
-      
+
 
     },
 
     startGame: function () {
 
         // Change the state back to Game.
-        this.state.start('Game');
+        this.state.start('Menu');
 
     }
 
 };
-
-
-
-
-
-
-
