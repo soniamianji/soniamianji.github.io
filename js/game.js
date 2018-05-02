@@ -62,7 +62,7 @@ var Game = {
 
       //generate Springs
       this.generateSpring();
-      
+
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
             // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
@@ -94,7 +94,7 @@ var Game = {
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
-    
+
 
     //fire collosion
     fallInTheFire = game.physics.arcade.collide(player,flames);
@@ -111,6 +111,13 @@ var Game = {
       //this.collapseSpring();
     };
 
+    //stones with platform collision
+    for (var i = 0; i < stonesPool.children.length; i++) {
+      //ceck for every stone in the stones pool and move it if it overlaps
+       stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
+       if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
+    };
+
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height){
@@ -119,10 +126,11 @@ var Game = {
 
             ledge.x = game.rnd.integerInRange(0, game.world.width -50);
             ledge.y = yStorage ;
+
      } },this);
 
-     //recreate stones when players y postion is past the last created stone
-    if( player.y < stonesPool.children[stonesPool.children.length-1].y){
+     //recreate stones when players y postion is past the fourth last created stone
+    if( player.y < stonesPool.children[stonesPool.children.length-3].y){
       this.generateStones();
     }
 
@@ -136,7 +144,7 @@ var Game = {
         player.animations.play('left');
 
 
-       
+
      }
      else if (cursors.right.isDown)
      {
@@ -165,7 +173,7 @@ var Game = {
 
       // track the maximum amount that the player has travelled
       //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
-      //the last stored changinypos, and we set the changing y pos 
+      //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
@@ -265,8 +273,10 @@ var Game = {
 
        //add stones to group and scale them
        redStone =  game.add.sprite(x,y,'stone_red');
+       redStone.scale.setTo(0.3,0.3);
+       //add to group
         stonesPool.add(redStone);
-        redStone.scale.setTo(0.3,0.3);
+
      }
     },
 
