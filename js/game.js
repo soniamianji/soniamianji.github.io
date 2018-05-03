@@ -1,7 +1,8 @@
 //global variables
 
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
- spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic;
+ spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,/*MISHO*/score, scoreText, fpsCounter, topScores,
+ fireBall, raSpawn;
 var hitSpring = false;
 MaxCameraY = 0;
 
@@ -18,6 +19,8 @@ var Game = {
         game.load.audio('collect', './assets/sounds/collect.mp3');
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
+        /*MISHO*/
+        game.load.image("ball", './assets/images/ball.png');
 
 
     },
@@ -54,21 +57,57 @@ var Game = {
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
+
+
+
+
+         /*MISHO*/
+         //REMINDER::REMOVE COMMENTS LATER PLEASE
+         // Donald is too fat
+         // Jumps too slow
+         // Springs are in front of fire
+         // Die once > bug?
+         // Maybe display highest score at all times?
+         // Mute button
+         // Donald sometimes dies for no reason?
+
+         // the score
+         topScores = [0,0,0,0,0];
+
+         score = 0
+         scoreText = game.add.text(14, 4, "score: "+score, {
+             fontSize: "20px",
+             fill: 'rgba(75, 101, 125, 0.5)',
+             align: "center",
+         });
+         scoreText.anchor.set(0, 0);
+         scoreText.fixedToCamera = true;
+
+         fpsCounter = 0;
+
+         if (localStorage.topScores !== undefined) {
+           topScores = JSON.parse(localStorage.topScores);
+           //console.log(localStorage);
+         }
+
         },
-
-
-
     update: function(){
+
+      /*MISHO*/
+      fpsCounter++;
+
+      console.log(game.time.fps);
 
       //generate Springs
       this.generateSpring();
-      
+
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
             // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
             // the y  and the height of the world are adjusted
             // the higher the player goes the height of the world expands
     game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,500 + player.changingYPos);
+
 
         //the distance between camera.y and the hero
     game.camera.y = player.y - 200;
@@ -77,9 +116,63 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
+
+        /*MISHO*/
+        //update score
+        //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
+        if (fpsCounter > 10) { // <<< change this this for (+1) faster
+          score++; // <<< change this for +(more) on every update
+          fpsCounter = 0;
+        }
     }
 
-        //if players y coordinate becomes more that the cameraslimhttps://drive.google.com/drive/folders/1koJsLsPZqP1VqfxdfqX8Bzk9AHn6zsu4it camera wont follow. this is how the camera would always go up
+    /*MISHO*/
+    // generate a random spawn frequency number the fireballs
+    raSpawn = Math.floor(Math.random() * 6);
+
+    //spawn a fireball only if there isn't one already
+    if (fireBall == undefined) {
+      if (5 == raSpawn) {
+        raSpawnX = game.rnd.integerInRange(20, game.world.width -20);
+        //raSpawnX = Math.floor(Math.random() * 220) + 40;
+        fireBall =  game.add.sprite(raSpawnX,game.camera.y-50,'ball');
+        fireBall.anchor.setTo(0.5,0.5);
+        game.physics.arcade.enable(fireBall);
+      }
+    }
+
+
+    //move the fireball only if there IS one already
+    if (fireBall != undefined) {
+      fireBall.y += 6 //<< adjust this for the speed of the fireball
+      if (fireBall.y > 510) {
+        fireBall.destroy();
+        fireBall = undefined;
+      }
+    }
+
+    var hitBall = game.physics.arcade.collide(player, fireBall);
+
+    if (hitBall) {
+      /*MISHO*/
+      //MAYBE MAKE THIS A FUCNTION?
+      //save the score if it is in top 5 highest
+      for (var i = 0; i < topScores.length; i++) {
+        if (score > topScores[i]) {
+          topScores.splice(i, 0, score);
+          topScores.pop();
+          break;
+        }
+      }
+      localStorage.topScores = JSON.stringify(topScores);
+
+      //gameOver
+      this.state.start('gameover');
+      bgMusic.stop();
+    }
+
+    //if players y coordinate becomes more that the cameraslimit camera wont follow. 
+    //this is how the camera would always go up
     if(Math.abs(player.y - MaxCameraY) > 0)
     {
         game.camera.y = MaxCameraY;
@@ -93,11 +186,14 @@ var Game = {
     if (hitStone)
     {
         collect.play();
+
+        /*MISHO*/
+        score+=10;
     }
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
-    
+
 
     //fire collosion
     fallInTheFire = game.physics.arcade.collide(player,flames);
@@ -139,7 +235,7 @@ var Game = {
         player.animations.play('left');
 
 
-       
+
      }
      else if (cursors.right.isDown)
      {
@@ -168,16 +264,31 @@ var Game = {
 
       // track the maximum amount that the player has travelled
       //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
-      //the last stored changinypos, and we set the changing y pos 
+      //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
      {
+        /*MISHO*/
+        //MAYBE MAKE THIS A FUCNTION?
+        //save the score if it is in top 5 highest
+        for (var i = 0; i < topScores.length; i++) {
+          if (score > topScores[i]) {
+            topScores.splice(i, 0, score);
+            topScores.pop();
+            break;
+          }
+        }
+        localStorage.topScores = JSON.stringify(topScores);
+
          //gameOver
          this.state.start('gameover');
          bgMusic.stop();
-
      }
+
+     /*MISHO*/
+     //call function to print updated score
+     this.updateScore();
     },
 
     createPlayer: function(){
@@ -253,7 +364,7 @@ var Game = {
     //generate the stones to collect
     generateStones: function() {
 
-    //grouping the stones
+      //grouping the stones
      stonesPool = game.add.group();
      //enableing physics on them
      game.physics.arcade.enable(stonesPool);
@@ -279,6 +390,26 @@ var Game = {
     //if player overlaps with stone remove the stone
     collectStone: function(player, redStone) {
       redStone.kill();
+    },
+
+    /*MISHO*/
+    //print the score
+    updateScore: function() {
+        scoreText.destroy();
+        scoreText = game.add.text(14, 4, "score: "+score, {
+            fontSize: "20px",
+            fill: 'rgba(75, 101, 125, 0.5)',
+            align: "center",
+        });
+        scoreText.anchor.set(0, 0)
+        scoreText.fixedToCamera = true;
     }
+
+
+
+
+
+
+
 
   };
