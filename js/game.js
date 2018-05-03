@@ -79,7 +79,7 @@ var Game = {
         MaxCameraY = game.camera.y;
     }
 
-        //if players y coordinate becomes more that the cameraslimit camera wont follow. this is how the camera would always go up
+        //if players y coordinate becomes more that the cameraslimhttps://drive.google.com/drive/folders/1koJsLsPZqP1VqfxdfqX8Bzk9AHn6zsu4it camera wont follow. this is how the camera would always go up
     if(Math.abs(player.y - MaxCameraY) > 0)
     {
         game.camera.y = MaxCameraY;
