@@ -1,13 +1,18 @@
 //global variables
-
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,/*MISHO*/score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn;
-var hitSpring = false;
+ fireBall, raSpawn,hitSpring;
+
+ //variables that holds value
+topScores = [0,0,0,0,0];
+score = 0
+fpsCounter = 0;
+hitSpring = false;
 MaxCameraY = 0;
 
-var Game = {
 
+var Game = {
+      
     preload: function(){
         game.load.spritesheet('trump','./assets/images/finaltrump.png', 290,416,12);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
@@ -26,8 +31,10 @@ var Game = {
     },
 
     create: function(){
+        
         //bg color
         game.stage.backgroundColor = "#e8c11c";
+        //sounds
         jump = game.add.audio('jump');
         collect = game.add.audio('collect');
         springSound = game.add.audio('springSound');
@@ -45,8 +52,6 @@ var Game = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         this.generatePlatforms();
         this.createPlayer();
-
-        //createStones
         this.generateStones();
 
         flames = game.add.sprite(0, 400, 'flames');
@@ -59,8 +64,6 @@ var Game = {
          cursors = game.input.keyboard.createCursorKeys();
 
 
-
-
          /*MISHO*/
          //REMINDER::REMOVE COMMENTS LATER PLEASE
          // Donald is too fat
@@ -71,19 +74,13 @@ var Game = {
          // Mute button
          // Donald sometimes dies for no reason?
 
-         // the score
-         topScores = [0,0,0,0,0];
-
-         score = 0
-         scoreText = game.add.text(14, 4, "score: "+score, {
+         scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: 'rgba(75, 101, 125, 0.5)',
              align: "center",
          });
          scoreText.anchor.set(0, 0);
          scoreText.fixedToCamera = true;
-
-         fpsCounter = 0;
 
          if (localStorage.topScores !== undefined) {
            topScores = JSON.parse(localStorage.topScores);
@@ -92,12 +89,10 @@ var Game = {
 
         },
     update: function(){
-
       /*MISHO*/
       fpsCounter++;
-
       console.log(game.time.fps);
-
+      
       //generate Springs
       this.generateSpring();
 
@@ -109,27 +104,36 @@ var Game = {
     game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,500 + player.changingYPos);
 
 
+    /*********************CAMERA**************/
         //the distance between camera.y and the hero
     game.camera.y = player.y - 200;
-
         //this is how we store camera.y value to maxcameraY
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
+    }
+    //if players y coordinate becomes more that the cameraslimit camera wont follow. 
+    //this is how the camera would always go up
+    if(Math.abs(player.y - MaxCameraY) > 0)
+    {
+        game.camera.y = MaxCameraY;
 
-        /*MISHO*/
+    }
+    
+
+
+     /*********************SCORE****************/
         //update score
         //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
         if (fpsCounter > 10) { // <<< change this this for (+1) faster
           score++; // <<< change this for +(more) on every update
           fpsCounter = 0;
         }
-    }
+    
 
-    /*MISHO*/
+/********************FIREBALL********************/
     // generate a random spawn frequency number the fireballs
     raSpawn = Math.floor(Math.random() * 6);
-
     //spawn a fireball only if there isn't one already
     if (fireBall == undefined) {
       if (5 == raSpawn) {
@@ -140,8 +144,6 @@ var Game = {
         game.physics.arcade.enable(fireBall);
       }
     }
-
-
     //move the fireball only if there IS one already
     if (fireBall != undefined) {
       fireBall.y += 6 //<< adjust this for the speed of the fireball
@@ -150,57 +152,40 @@ var Game = {
         fireBall = undefined;
       }
     }
-
+/******************COLLISIONS*************************/
     var hitBall = game.physics.arcade.collide(player, fireBall);
 
     if (hitBall) {
-      /*MISHO*/
-      //MAYBE MAKE THIS A FUCNTION?
-      //save the score if it is in top 5 highest
-      for (var i = 0; i < topScores.length; i++) {
-        if (score > topScores[i]) {
-          topScores.splice(i, 0, score);
-          topScores.pop();
-          break;
-        }
-      }
-      localStorage.topScores = JSON.stringify(topScores);
-
-      //gameOver
-      this.state.start('gameover');
-      bgMusic.stop();
+      this.gameOverScore();
     }
-
-    //if players y coordinate becomes more that the cameraslimit camera wont follow. 
-    //this is how the camera would always go up
-    if(Math.abs(player.y - MaxCameraY) > 0)
-    {
-        game.camera.y = MaxCameraY;
-
-    }
-
-
 
     //stone checkCollision
     var hitStone = 	game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
     if (hitStone)
     {
         collect.play();
-
-        /*MISHO*/
         score+=10;
+    }
+
+     //stones with platform collision
+     for (var i = 0; i < stonesPool.children.length; i++) {
+      //ceck for every stone in the stones pool and move it if it overlaps
+       stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
+       if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
+    };
+
+     //recreate stones when players y postion is past the last created stone
+     if( player.y < stonesPool.children[stonesPool.children.length-3].y){
+      this.generateStones();
     }
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
-
-
     //fire collosion
     fallInTheFire = game.physics.arcade.collide(player,flames);
 
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
-
     //if the player hits the spring
     if (hitSpring) {
       //set the velocity to let the player jump higher
@@ -210,32 +195,24 @@ var Game = {
       //this.collapseSpring();
     };
 
+/************REGENRATING LEDGES******************/
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height ){
-            
             yStorage = ledge.y - 600;
-
             ledge.x = game.rnd.integerInRange(0, game.world.width -50);
             ledge.y = yStorage ;
      } },this);
 
-     //recreate stones when players y postion is past the last created stone
-    if( player.y < stonesPool.children[stonesPool.children.length-1].y){
-      this.generateStones();
-    }
+    
 
 
-     //movement
+     /***************Movement*****************/
      if (cursors.left.isDown)
      {
          //  Move to the left
-
         player.body.velocity.x = -250;
         player.animations.play('left');
-
-
-
      }
      else if (cursors.right.isDown)
      {
@@ -248,15 +225,12 @@ var Game = {
          player.body.velocity.x = 0;
 
      }
-
       //Allow the player to jump if they are touching the ground.
      if ( player.body.touching.down && (!hitSpring) && hitPlatform /*|| hitBase*/)
      {
-
          player.body.velocity.y = -300;
          player.body.gravity.y = 300;
            jump.play();
-
      }
 
      // wrap world coordinated so that you can warp from left to right and right to left
@@ -269,30 +243,22 @@ var Game = {
 
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
      {
-        /*MISHO*/
-        //MAYBE MAKE THIS A FUCNTION?
-        //save the score if it is in top 5 highest
-        for (var i = 0; i < topScores.length; i++) {
-          if (score > topScores[i]) {
-            topScores.splice(i, 0, score);
-            topScores.pop();
-            break;
-          }
-        }
-        localStorage.topScores = JSON.stringify(topScores);
-
-         //gameOver
-         this.state.start('gameover');
-         bgMusic.stop();
+       this.gameOverScore();
      }
 
-     /*MISHO*/
      //call function to print updated score
      this.updateScore();
     },
+    render: function() {
+
+      // Camera
+      //game.debug.cameraInfo(game.camera, 32, 32);
+      game.debug.spriteInfo(ledge,32,32);
+  
+  },
 
     createPlayer: function(){
-        player = game.add.sprite(game.world.centerX, game.world.height - 300, 'trump');
+        player = game.add.sprite(platformPool.children[2].x, platformPool.children[2].y-100, 'trump');
         player.animations.add('right',[2,3],false);
         player.animations.add('left',[9,8],false);
 
@@ -312,11 +278,9 @@ var Game = {
     },
 
     generatePlatforms: function(){
-        
         //grouping the platforms
        platformPool = game.add.group();
        platformPool.enableBody = true;
-
        //creating 10
      for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
@@ -326,11 +290,7 @@ var Game = {
         ledge.scale.setTo(0.1,0.1);
         ledge.body.immovable = true;
         ledge.width =50;
-
-      
      }
-    
-
     },
 
     //generate a spring on every 5th ledge
@@ -382,8 +342,9 @@ var Game = {
 
        //add stones to group and scale them
        redStone =  game.add.sprite(x,y,'stone_red');
+       redStone.scale.setTo(0.3,0.3);
         stonesPool.add(redStone);
-        redStone.scale.setTo(0.3,0.3);
+        
      }
     },
 
@@ -403,10 +364,22 @@ var Game = {
         });
         scoreText.anchor.set(0, 0)
         scoreText.fixedToCamera = true;
+    },
+
+
+    gameOverScore: function(){
+      //save the score if it is in top 5 highest
+      for (var i = 0; i < topScores.length; i++) {
+        if (score > topScores[i]) {
+          topScores.splice(i, 0, score);
+          topScores.pop();
+          break;
+        }
+      }
+      localStorage.topScores = JSON.stringify(topScores);
+      this.state.start('gameover');
+      bgMusic.stop();
     }
-
-
-
 
 
 
