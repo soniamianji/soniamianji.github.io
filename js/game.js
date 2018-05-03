@@ -142,7 +142,7 @@ var Game = {
 
     //move the fireball only if there IS one already
     if (fireBall != undefined) {
-      fireBall.y += 6
+      fireBall.y += 6 //<< adjust this for the speed of the fireball
       if (fireBall.y > 510) {
         fireBall.destroy();
         fireBall = undefined;
