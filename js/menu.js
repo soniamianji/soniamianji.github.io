@@ -25,6 +25,20 @@ var Menu = {
         var laughter = game.add.audio('laughter');
         laughter.play();
 
+        //parse the saved scores
+        if (localStorage.topScores !== undefined) {
+            topScores = JSON.parse(localStorage.topScores);
+            //console.log(localStorage);
+         }
+
+        //display highest score
+        var highestScoreText = game.add.text(165, 158, topScores[0], {
+            fontSize: "24px",
+            fill: 'red',
+            align: "center",
+        });
+        highestScoreText.anchor.set(0.5, 0.5);
+
     },
 
     startGame: function () {
