@@ -68,7 +68,7 @@ var Game = {
             // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
             // the y  and the height of the world are adjusted
             // the higher the player goes the height of the world expands
-    game.world.setBounds(0 ,-player.changingYPos,game.world.width  , game.world.height + player.changingYpos);
+    game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,500 + player.changingYPos);
 
         //the distance between camera.y and the hero
     game.camera.y = player.y - 200;
@@ -85,6 +85,9 @@ var Game = {
         game.camera.y = MaxCameraY;
 
     }
+
+
+
     //stone checkCollision
     var hitStone = 	game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
     if (hitStone)
@@ -113,8 +116,8 @@ var Game = {
 
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
-        if( ledge.y >= game.camera.y+game.camera.height){
-
+        if( ledge.y >= game.camera.y+game.camera.height ){
+            
             yStorage = ledge.y - 600;
 
             ledge.x = game.rnd.integerInRange(0, game.world.width -50);
@@ -198,7 +201,7 @@ var Game = {
     },
 
     generatePlatforms: function(){
-
+        
         //grouping the platforms
        platformPool = game.add.group();
        platformPool.enableBody = true;
@@ -212,7 +215,10 @@ var Game = {
         ledge.scale.setTo(0.1,0.1);
         ledge.body.immovable = true;
         ledge.width =50;
+
+      
      }
+    
 
     },
 
