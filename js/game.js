@@ -2,7 +2,7 @@
 
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,/*MISHO*/score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn;
+ fireBall, raSpawn, mute, unmute;
 var hitSpring = false;
 MaxCameraY = 0;
 
@@ -21,6 +21,8 @@ var Game = {
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
         /*MISHO*/
         game.load.image("ball", './assets/images/ball.png');
+        game.load.image("mute", "./assets/images/mute.png");
+        game.load.image("unmute", "./assets/images/unmute.png");
 
 
     },
@@ -58,9 +60,6 @@ var Game = {
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
 
-
-
-
          /*MISHO*/
          //REMINDER::REMOVE COMMENTS LATER PLEASE
          // Donald is too fat
@@ -69,7 +68,12 @@ var Game = {
          // Die once > bug?
          // Maybe display highest score at all times?
          // Mute button
-         // Donald sometimes dies for no reason?
+         // Donald sometimes dies for no reason PROBALY BECAUSE FIREBALLS ARE SOMETIMES IN THE MIIDLE
+         // Springs touched from the top
+         //RESTART DOES SOMETHING
+         //CANT START TWO TIMES
+         //NOT THE CACHE
+         //DONALD JUMPS ON HIS RED BUTTON AND NUKE THE ISIS
 
          // the score
          topScores = [0,0,0,0,0];
@@ -90,13 +94,51 @@ var Game = {
            //console.log(localStorage);
          }
 
+         //volume button controls
+         if (game.sound.volume==1) {
+           mute = this.game.add.sprite(270,4,"mute");
+           mute.anchor.set(0, 0);
+           mute.fixedToCamera = true;
+           mute.inputEnabled = true;
+           mute.events.onInputDown.add(soundOFF, this);
+         } else if (game.sound.volume==0) {
+           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute.anchor.set(0, 0);
+           unmute.fixedToCamera = true;
+           unmute.inputEnabled = true;
+           unmute.events.onInputDown.add(soundON, this);
+         }
+
+
+         function soundOFF() {
+           game.sound.volume = 0;
+
+           mute.destroy();
+
+           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute.anchor.set(0, 0);
+           unmute.fixedToCamera = true;
+           unmute.inputEnabled = true;
+           unmute.events.onInputDown.add(soundON, this);
+         }
+
+         function soundON() {
+           game.sound.volume = 1;
+
+           unmute.destroy();
+
+           mute = this.game.add.sprite(270,4,"mute");
+           mute.anchor.set(0, 0);
+           mute.fixedToCamera = true;
+           mute.inputEnabled = true;
+           mute.events.onInputDown.add(soundOFF, this);
+         }
+
         },
     update: function(){
 
       /*MISHO*/
       fpsCounter++;
-
-      console.log(game.time.fps);
 
       //generate Springs
       this.generateSpring();
@@ -142,7 +184,7 @@ var Game = {
 
     //move the fireball only if there IS one already
     if (fireBall != undefined) {
-      fireBall.y += 6 //<< adjust this for the speed of the fireball
+      fireBall.y += 4 //<< adjust this for the speed of the fireball
       if (fireBall.y > 510) {
         fireBall.destroy();
         fireBall = undefined;
@@ -306,7 +348,6 @@ var Game = {
     },
 
     generatePlatforms: function(){
-
         //grouping the platforms
        platformPool = game.add.group();
        platformPool.enableBody = true;
@@ -314,7 +355,7 @@ var Game = {
        //creating 10
      for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
-        var randomY = game.world.height -100 *i;
+        var randomY = 500 - 100*i; // replaxed game.world.height with 500
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
         ledge.scale.setTo(0.1,0.1);
@@ -395,12 +436,5 @@ var Game = {
         scoreText.anchor.set(0, 0)
         scoreText.fixedToCamera = true;
     }
-
-
-
-
-
-
-
 
   };
