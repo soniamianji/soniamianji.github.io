@@ -1,7 +1,7 @@
 //global variables
 var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,/*MISHO*/score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring;
+ fireBall, raSpawn,hitSpring,initialWorldHeight;
 
  //variables that holds value
 topScores = [0,0,0,0,0];
@@ -9,6 +9,7 @@ score = 0
 fpsCounter = 0;
 hitSpring = false;
 MaxCameraY = 0;
+initialWorldHeight = 500;
 
 
 var Game = {
@@ -284,7 +285,7 @@ var Game = {
        //creating 10
      for (var i= 0; i < 10; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
-        var randomY = game.world.height -100 *i;
+        var randomY = initialWorldHeight -100 *i;
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
         ledge.scale.setTo(0.1,0.1);
