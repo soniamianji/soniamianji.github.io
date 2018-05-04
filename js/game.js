@@ -17,7 +17,7 @@ var Game = {
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
-        game.load.image('base', './assets/images/base.png');
+        game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
         game.load.image('stone_red', './assets/images/water.png');
@@ -285,14 +285,14 @@ var Game = {
        platformPool = game.add.group();
        platformPool.enableBody = true;
        //creating 10
-     for (var i= 0; i < 10; i++){
+     for (var i= 0; i < 7; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -50);
         var randomY = initialWorldHeight -100 *i;
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
         ledge.scale.setTo(0.1,0.1);
         ledge.body.immovable = true;
-        ledge.width =50;
+        ledge.width =80;
      }
     },
 
