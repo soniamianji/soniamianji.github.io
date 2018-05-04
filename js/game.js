@@ -238,7 +238,7 @@ var Game = {
      if ( player.body.touching.down && (!hitSpring) && hitPlatform /*|| hitBase*/)
      {
          player.body.velocity.y = -300;
-         player.body.gravity.y = 300;
+         player.body.gravity.y = 400;
            jump.play();
      }
 
