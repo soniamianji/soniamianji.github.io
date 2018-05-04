@@ -1,6 +1,6 @@
 //global variables
-var player,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
- spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,score, scoreText, fpsCounter, topScores,
+var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
+ spring, spring_collapsed, stonesPool,flames,jump, collect, spring,bgMusic,score, scoreText, fpsCounter, topScores,
  fireBall, raSpawn,hitSpring,initialWorldHeight,soundControl,playPause;
 
  //variables that holds value
@@ -101,7 +101,6 @@ var Game = {
 
         },
     update: function(){
-      /*MISHO*/
       fpsCounter++;
       console.log(game.time.fps);
       
@@ -113,7 +112,7 @@ var Game = {
             // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
             // the y  and the height of the world are adjusted
             // the higher the player goes the height of the world expands
-    game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,500 + player.changingYPos);
+    game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
 
 
     /*********************CAMERA**************/
@@ -191,8 +190,6 @@ var Game = {
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
-    //fire collosion
-    fallInTheFire = game.physics.arcade.collide(player,flames);
 
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
@@ -213,9 +210,6 @@ var Game = {
             ledge.x = game.rnd.integerInRange(0, game.world.width -50);
             ledge.y = yStorage ;
      } },this);
-
-    
-
 
      /***************Movement*****************/
      if (cursors.left.isDown)
@@ -257,7 +251,7 @@ var Game = {
        this.gameOverScore();
        console.log('death reson: out of camera sight ');
      }
-
+     
      //call function to print updated score
      this.updateScore();
     },
