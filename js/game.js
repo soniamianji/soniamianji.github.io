@@ -82,7 +82,6 @@ var Game = {
          //REMINDER::REMOVE COMMENTS LATER PLEASE
          // Springs are in front of fire
          // Maybe display highest score at all times?
-         // Mute button
          // Donald sometimes dies for no reason?
 
          scoreText = game.add.text(14, 4, "score: " +score, {
