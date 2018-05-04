@@ -1,7 +1,7 @@
 //global variables
-var player, platfroms, ground,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
- spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,/*MISHO*/score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring,initialWorldHeight;
+var player,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
+ spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,score, scoreText, fpsCounter, topScores,
+ fireBall, raSpawn,hitSpring,initialWorldHeight,soundControl;
 
  //variables that holds value
 topScores = [0,0,0,0,0];
@@ -17,6 +17,7 @@ var Game = {
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
+        game.load.spritesheet('sound', './assets/images/sound.png',100,100);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
@@ -26,9 +27,13 @@ var Game = {
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
         game.load.image("ball", './assets/images/ball.png');
-
+       
 
     },
+
+
+
+
 
     create: function(){
         
@@ -54,6 +59,11 @@ var Game = {
         this.createPlayer();
         this.generateStones();
 
+        soundControl = game.add.button(250,8,'sound',this.soundFunction,this);
+        soundControl.frame = 0;
+        soundControl.scale.setTo(0.2);
+        soundControl.fixedToCamera = true;
+
         flames = game.add.sprite(0, 400, 'flames');
         flames.scale.setTo(0.5);
         flames.animations.add('fire', [0,1,2], 3, true);
@@ -66,10 +76,7 @@ var Game = {
 
          /*MISHO*/
          //REMINDER::REMOVE COMMENTS LATER PLEASE
-         // Donald is too fat
-         // Jumps too slow
          // Springs are in front of fire
-         // Die once > bug?
          // Maybe display highest score at all times?
          // Mute button
          // Donald sometimes dies for no reason?
@@ -162,12 +169,8 @@ var Game = {
     }
 
     //stone checkCollision
-    var hitStone = 	game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
-    if (hitStone)
-    {
-        collect.play();
-        score+=10;
-    }
+    game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
+   
 
      //stones with platform collision
      for (var i = 0; i < stonesPool.children.length; i++) {
@@ -242,8 +245,9 @@ var Game = {
       //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
       //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
+     
 
-     if (player.y > game.camera.y + game.camera.height || fallInTheFire)
+     if (player.y > game.camera.y + game.camera.height)
      {
        this.gameOverScore();
        console.log('death reson: out of camera sight ');
@@ -353,6 +357,8 @@ var Game = {
 
     //if player overlaps with stone remove the stone
     collectStone: function(player, redStone) {
+      collect.play();
+      score+=10;
       redStone.kill();
     },
 
@@ -382,7 +388,16 @@ var Game = {
       localStorage.topScores = JSON.stringify(topScores);
       this.state.start('gameover');
       bgMusic.stop();
+    },
+
+   soundFunction: function(target){
+      if (target.frame = 1){
+        game.sound.mute = true;
+      }else{
+        game.sound.mute = false;
+      }
     }
+    
 
 
 
