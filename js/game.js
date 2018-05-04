@@ -83,6 +83,8 @@ var Game = {
          // Springs are in front of fire
          // Maybe display highest score at all times?
          // Donald sometimes dies for no reason?
+         //fireball timer should be added so there is no fire ball for atleast
+         // 15 sec after the game starts
 
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
