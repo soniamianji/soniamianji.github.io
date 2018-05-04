@@ -15,17 +15,16 @@ initialWorldHeight = 500;
 var Game = {
       
     preload: function(){
-        game.load.spritesheet('trump','./assets/images/finaltrump.png', 290,416,12);
+        game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
         game.load.image('base', './assets/images/base.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
-        game.load.image('stone_red', './assets/images/stone_red.png');
+        game.load.image('stone_red', './assets/images/water.png');
         game.load.audio('jump', './assets/sounds/jump.mp3');
         game.load.audio('collect', './assets/sounds/collect.mp3');
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
-        /*MISHO*/
         game.load.image("ball", './assets/images/ball.png');
 
 
@@ -141,7 +140,8 @@ var Game = {
         raSpawnX = game.rnd.integerInRange(20, game.world.width -20);
         //raSpawnX = Math.floor(Math.random() * 220) + 40;
         fireBall =  game.add.sprite(raSpawnX,game.camera.y-50,'ball');
-        fireBall.anchor.setTo(0.2,0.2);
+        fireBall.anchor.setTo(0.5,0.5);
+        fireBall.scale.setTo(0.5,0.5);
         game.physics.arcade.enable(fireBall);
       }
     }
@@ -261,14 +261,14 @@ var Game = {
   },
 
     createPlayer: function(){
-        player = game.add.sprite(platformPool.children[3].x, platformPool.children[3].y-100, 'trump');
-        player.animations.add('right',[2,3],false);
-        player.animations.add('left',[9,8],false);
+        player = game.add.sprite(platformPool.children[3].x, platformPool.children[3].y-100, 'hero');
+        player.animations.add('right',[0,1,2,3,4,5,6,7,8,9],false);
+        player.animations.add('left',[10,11,12,13,14,15,16,17,18,19],false);
 
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
-        player.scale.setTo(0.15,0.15);
+        player.scale.setTo(0.3,0.3);
         player.body.gravity.y = 300;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
@@ -345,7 +345,7 @@ var Game = {
 
        //add stones to group and scale them
        redStone =  game.add.sprite(x,y,'stone_red');
-       redStone.scale.setTo(0.3,0.3);
+       redStone.scale.setTo(0.09,0.09);
         stonesPool.add(redStone);
         
      }
