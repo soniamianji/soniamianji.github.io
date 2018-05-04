@@ -67,7 +67,7 @@ var Game = {
         playPause.scale.setTo(0.07);
         playPause.fixedToCamera =true;
        
-
+        //flame animation
         flames = game.add.sprite(0, 400, 'flames');
         flames.scale.setTo(0.5);
         flames.animations.add('fire', [0,1,2], 3, true);
@@ -86,6 +86,8 @@ var Game = {
          //fireball timer should be added so there is no fire ball for atleast
          // 15 sec after the game starts
 
+
+         //scoring 
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: 'rgba(75, 101, 125, 0.5)',
@@ -100,6 +102,9 @@ var Game = {
          }
 
         },
+
+
+
     update: function(){
       fpsCounter++;
       console.log(game.time.fps);
@@ -109,9 +114,6 @@ var Game = {
 
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
-            // The Camera bounds and Physics bounds (if set) are also updated to match the new World bounds.
-            // the y  and the height of the world are adjusted
-            // the higher the player goes the height of the world expands
     game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
 
 
@@ -251,7 +253,7 @@ var Game = {
        this.gameOverScore();
        console.log('death reson: out of camera sight ');
      }
-     
+
      //call function to print updated score
      this.updateScore();
     },
