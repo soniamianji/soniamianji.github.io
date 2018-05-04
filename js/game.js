@@ -1,7 +1,7 @@
 //global variables
 var player,background,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,fallInTheFire,bgMusic,score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring,initialWorldHeight,soundControl;
+ fireBall, raSpawn,hitSpring,initialWorldHeight,soundControl,playPause;
 
  //variables that holds value
 topScores = [0,0,0,0,0];
@@ -18,6 +18,7 @@ var Game = {
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
         game.load.spritesheet('sound', './assets/images/sound.png',100,100);
+        game.load.spritesheet('playPause','./assets/images/pausePlay.png',245,512);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
@@ -27,13 +28,8 @@ var Game = {
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
         game.load.image("ball", './assets/images/ball.png');
-       
 
     },
-
-
-
-
 
     create: function(){
         
@@ -59,10 +55,18 @@ var Game = {
         this.createPlayer();
         this.generateStones();
 
+        //soundsControl
         soundControl = game.add.button(250,8,'sound',this.soundFunction,this);
         soundControl.frame = 0;
         soundControl.scale.setTo(0.2);
         soundControl.fixedToCamera = true;
+
+        //play and pause
+        playPause = game.add.button(220,0,'playPause',this.pauseFunction,this);
+        playPause.frame = 1;
+        playPause.scale.setTo(0.07);
+        playPause.fixedToCamera =true;
+       
 
         flames = game.add.sprite(0, 400, 'flames');
         flames.scale.setTo(0.5);
@@ -390,13 +394,21 @@ var Game = {
       bgMusic.stop();
     },
 
-   soundFunction: function(target){
-      if (target.frame = 1){
+   soundFunction: function(soundControl){
+      if (soundControl.frame = 1){
         game.sound.mute = true;
       }else{
         game.sound.mute = false;
       }
-    }
+    },
+
+    pauseFunction: function(){
+      if (playPause.frame = 1){
+        game.paused = true;
+      }
+    },
+
+    
     
 
 
