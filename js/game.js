@@ -141,7 +141,7 @@ var Game = {
         raSpawnX = game.rnd.integerInRange(20, game.world.width -20);
         //raSpawnX = Math.floor(Math.random() * 220) + 40;
         fireBall =  game.add.sprite(raSpawnX,game.camera.y-50,'ball');
-        fireBall.anchor.setTo(0.5,0.5);
+        fireBall.anchor.setTo(0.2,0.2);
         game.physics.arcade.enable(fireBall);
       }
     }
@@ -158,6 +158,7 @@ var Game = {
 
     if (hitBall) {
       this.gameOverScore();
+      console.log("death reason : hitBall");
     }
 
     //stone checkCollision
@@ -245,6 +246,7 @@ var Game = {
      if (player.y > game.camera.y + game.camera.height || fallInTheFire)
      {
        this.gameOverScore();
+       console.log('death reson: out of camera sight ');
      }
 
      //call function to print updated score
@@ -259,14 +261,14 @@ var Game = {
   },
 
     createPlayer: function(){
-        player = game.add.sprite(platformPool.children[2].x, platformPool.children[2].y-100, 'trump');
+        player = game.add.sprite(platformPool.children[3].x, platformPool.children[3].y-100, 'trump');
         player.animations.add('right',[2,3],false);
         player.animations.add('left',[9,8],false);
 
         //  We need to enable physics on the player
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
-        player.scale.setTo(0.2,0.2);
+        player.scale.setTo(0.15,0.15);
         player.body.gravity.y = 300;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
@@ -303,7 +305,7 @@ var Game = {
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
-        spring.scale.setTo(.4);
+        spring.scale.setTo(.3);
 
         //enable body on spring
         game.physics.arcade.enable(spring);
