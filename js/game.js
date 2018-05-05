@@ -113,6 +113,8 @@ var Game = {
       fpsCounter++;
       console.log(game.time.fps);
       
+
+          /***************Springs COMMENTED OUT*********/
       //generate Springs
      // this.generateSpring();
 
@@ -181,14 +183,15 @@ var Game = {
     //stone checkCollision
     game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
    
-    /***************STONES COMMENTED OUT*********/
      //stones with platform collision
-    /* for (var i = 0; i < stonesPool.children.length; i++) {
+    for (var i = 0; i < stonesPool.children.length; i++) {
       //ceck for every stone in the stones pool and move it if it overlaps
        stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
        if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
     };
+        /***************STONES COMMENTED OUT*********/
 
+    /*
      //recreate stones when players y postion is past the last created stone
      if( player.y < stonesPool.children[stonesPool.children.length-3].y){
       //this.generateStones();
@@ -219,6 +222,7 @@ var Game = {
             yStorage = ledge.y - 600 - 50;
             ledge.x = game.rnd.integerInRange(0, game.world.width - 80);
             ledge.y = yStorage ;
+
      } },this);
 
      /***************Movement*****************/
@@ -255,7 +259,7 @@ var Game = {
       //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
      
-
+     //if the player falls in the fire game is over
      if (player.y > game.camera.y + game.camera.height || player.y > flames.y)
      {
        this.gameOverScore();
