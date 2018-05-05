@@ -18,7 +18,6 @@ var Game = {
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
-        game.load.spritesheet('sound', './assets/images/sound.png',100,100);
         game.load.spritesheet('playPause','./assets/images/pausePlay.png',245,512);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
@@ -58,14 +57,9 @@ var Game = {
         this.createPlayer();
         this.generateStones();
 
-        //soundsControl
-        soundControl = game.add.button(250,8,'sound',this.soundFunction,this);
-        soundControl.frame = 0;
-        soundControl.scale.setTo(0.2);
-        soundControl.fixedToCamera = true;
 
         //play and pause
-        playPause = game.add.button(220,0,'playPause',this.pauseFunction,this);
+        playPause = game.add.button(245,0,'playPause',this.pauseFunction,this);
         playPause.frame = 1;
         playPause.scale.setTo(0.07);
         playPause.fixedToCamera =true;
@@ -110,14 +104,16 @@ var Game = {
 
          //volume button controls
          if (game.sound.volume==1) {
-           mute = this.game.add.sprite(270,4,"mute");
+           mute = this.game.add.sprite(270,8,"mute");
            mute.anchor.set(0, 0);
+           mute.scale.setTo(0.8);
            mute.fixedToCamera = true;
            mute.inputEnabled = true;
            mute.events.onInputDown.add(soundOFF, this);
          } else if (game.sound.volume==0) {
-           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute = this.game.add.sprite(270,8,"unmute");
            unmute.anchor.set(0, 0);
+           mute.scale.setTo(0.8);
            unmute.fixedToCamera = true;
            unmute.inputEnabled = true;
            unmute.events.onInputDown.add(soundON, this);
@@ -129,8 +125,9 @@ var Game = {
 
            mute.destroy();
 
-           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute = this.game.add.sprite(270,8,"unmute");
            unmute.anchor.set(0, 0);
+           unmute.scale.setTo(0.8);
            unmute.fixedToCamera = true;
            unmute.inputEnabled = true;
            unmute.events.onInputDown.add(soundON, this);
@@ -138,11 +135,10 @@ var Game = {
 
          function soundON() {
            game.sound.volume = 1;
-
            unmute.destroy();
-
-           mute = this.game.add.sprite(270,4,"mute");
+           mute = this.game.add.sprite(270,8,"mute");
            mute.anchor.set(0, 0);
+           mute.scale.setTo(0.8);
            mute.fixedToCamera = true;
            mute.inputEnabled = true;
            mute.events.onInputDown.add(soundOFF, this);
@@ -237,13 +233,13 @@ var Game = {
        stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
        if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
     };
-        /***************STONES COMMENTED OUT*********/
 
-    /*
+
+    
      //recreate stones when players y postion is past the last created stone
      if( player.y < stonesPool.children[stonesPool.children.length-3].y){
-      //this.generateStones();
-     }*/
+      this.generateStones();
+     }
 
 
 
