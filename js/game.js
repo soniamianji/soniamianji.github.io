@@ -1,7 +1,8 @@
 //global variables
+
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,bgMusic,score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring,initialWorldHeight,soundControl,playPause;
+ fireBall, raSpawn,hitSpring,initialWorldHeight,mute,unmute,playPause;
 
  //variables that holds value
 topScores = [0,0,0,0,0];
@@ -28,6 +29,8 @@ var Game = {
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
         game.load.audio('bgMusic', './assets/sounds/bgMusic.mp3');
         game.load.image("ball", './assets/images/ball.png');
+        game.load.image("mute", "./assets/images/mute.png");
+        game.load.image("unmute", "./assets/images/unmute.png");
 
     },
 
@@ -76,15 +79,19 @@ var Game = {
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-
-
+      
          /*MISHO*/
          //REMINDER::REMOVE COMMENTS LATER PLEASE
          // Springs are in front of fire
          // Maybe display highest score at all times?
+
+         // Donald sometimes dies for no reason PROBALY BECAUSE FIREBALLS ARE SOMETIMES IN THE MIIDLE
+         // Springs touched from the top
+         //NOT THE CACHE
          // Donald sometimes dies for no reason?
          //fireball timer should be added so there is no fire ball for atleast
          // 15 sec after the game starts
+
 
 
          //scoring 
@@ -101,6 +108,46 @@ var Game = {
            //console.log(localStorage);
          }
 
+         //volume button controls
+         if (game.sound.volume==1) {
+           mute = this.game.add.sprite(270,4,"mute");
+           mute.anchor.set(0, 0);
+           mute.fixedToCamera = true;
+           mute.inputEnabled = true;
+           mute.events.onInputDown.add(soundOFF, this);
+         } else if (game.sound.volume==0) {
+           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute.anchor.set(0, 0);
+           unmute.fixedToCamera = true;
+           unmute.inputEnabled = true;
+           unmute.events.onInputDown.add(soundON, this);
+         }
+
+
+         function soundOFF() {
+           game.sound.volume = 0;
+
+           mute.destroy();
+
+           unmute = this.game.add.sprite(270,4,"unmute");
+           unmute.anchor.set(0, 0);
+           unmute.fixedToCamera = true;
+           unmute.inputEnabled = true;
+           unmute.events.onInputDown.add(soundON, this);
+         }
+
+         function soundON() {
+           game.sound.volume = 1;
+
+           unmute.destroy();
+
+           mute = this.game.add.sprite(270,4,"mute");
+           mute.anchor.set(0, 0);
+           mute.fixedToCamera = true;
+           mute.inputEnabled = true;
+           mute.events.onInputDown.add(soundOFF, this);
+         }
+
         },
 
 
@@ -115,6 +162,7 @@ var Game = {
       
 
           /***************Springs COMMENTED OUT*********/
+
       //generate Springs
      // this.generateSpring();
 
@@ -166,7 +214,7 @@ var Game = {
     }
     //move the fireball only if there IS one already
     if (fireBall != undefined) {
-      fireBall.y += 6 //<< adjust this for the speed of the fireball
+      fireBall.y += 4 //<< adjust this for the speed of the fireball
       if (fireBall.y > 510) {
         fireBall.destroy();
         fireBall = undefined;
@@ -302,6 +350,7 @@ var Game = {
        platformPool = game.add.group();
        platformPool.enableBody = true;
        //creating 10
+
      for (var i= 0; i < 7; i++){
         var randomX =game.rnd.integerInRange(0, game.world.width -80);
         var randomY = initialWorldHeight -100 *i;
@@ -389,6 +438,7 @@ var Game = {
     },
 
 
+
     gameOverScore: function(){
       //save the score if it is in top 5 highest
       for (var i = 0; i < topScores.length; i++) {
@@ -403,13 +453,7 @@ var Game = {
       bgMusic.stop();
     },
 
-   soundFunction: function(soundControl){
-      if (soundControl.frame = 1){
-        game.sound.mute = true;
-      }else{
-        game.sound.mute = false;
-      }
-    },
+   
 
     pauseFunction: function(){
       if (playPause.frame = 1){
@@ -423,8 +467,6 @@ var Game = {
 
     
     
-
-
 
 
 

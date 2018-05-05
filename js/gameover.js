@@ -5,6 +5,9 @@ var gameover = {
         // Load the needed image for this game screen.
         game.load.image('gameover', './assets/images/gameover.png');
         game.load.audio('GOSound', './assets/sounds/GO.mp3');
+
+        game.load.image("mute", "./assets/images/mute.png");
+        game.load.image("unmute", "./assets/images/unmute.png");
     },
 
     create : function() {
@@ -48,7 +51,44 @@ var gameover = {
         });
         lastScoreText.anchor.set(0.5, 0.5);
 
+        //volume button controls
+        if (game.sound.volume==1) {
+          mute = this.game.add.sprite(270,4,"mute");
+          mute.anchor.set(0, 0);
+          mute.fixedToCamera = true;
+          mute.inputEnabled = true;
+          mute.events.onInputDown.add(soundOFF, this);
+        } else if (game.sound.volume==0) {
+          unmute = this.game.add.sprite(270,4,"unmute");
+          unmute.anchor.set(0, 0);
+          unmute.fixedToCamera = true;
+          unmute.inputEnabled = true;
+          unmute.events.onInputDown.add(soundON, this);
+        }
 
+        function soundOFF() {
+          game.sound.volume = 0;
+
+          mute.destroy();
+
+          unmute = this.game.add.sprite(270,4,"unmute");
+          unmute.anchor.set(0, 0);
+          unmute.fixedToCamera = true;
+          unmute.inputEnabled = true;
+          unmute.events.onInputDown.add(soundON, this);
+        }
+
+        function soundON() {
+          game.sound.volume = 1;
+
+          unmute.destroy();
+
+          mute = this.game.add.sprite(270,4,"mute");
+          mute.anchor.set(0, 0);
+          mute.fixedToCamera = true;
+          mute.inputEnabled = true;
+          mute.events.onInputDown.add(soundOFF, this);
+        }
 
     },
 
