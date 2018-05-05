@@ -106,11 +106,15 @@ var Game = {
 
 
     update: function(){
+
+     
+
+
       fpsCounter++;
       console.log(game.time.fps);
       
       //generate Springs
-      this.generateSpring();
+     // this.generateSpring();
 
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
@@ -177,9 +181,9 @@ var Game = {
     //stone checkCollision
     game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
    
-
+    /***************STONES COMMENTED OUT*********/
      //stones with platform collision
-     for (var i = 0; i < stonesPool.children.length; i++) {
+    /* for (var i = 0; i < stonesPool.children.length; i++) {
       //ceck for every stone in the stones pool and move it if it overlaps
        stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
        if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
@@ -187,8 +191,10 @@ var Game = {
 
      //recreate stones when players y postion is past the last created stone
      if( player.y < stonesPool.children[stonesPool.children.length-3].y){
-      this.generateStones();
-    }
+      //this.generateStones();
+     }*/
+
+
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
@@ -204,12 +210,14 @@ var Game = {
       //this.collapseSpring();
     };
 
+
+
 /************REGENRATING LEDGES******************/
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height ){
-            yStorage = ledge.y - 600;
-            ledge.x = game.rnd.integerInRange(0, game.world.width -50);
+            yStorage = ledge.y - 600 - 50;
+            ledge.x = game.rnd.integerInRange(0, game.world.width - 80);
             ledge.y = yStorage ;
      } },this);
 
@@ -248,10 +256,10 @@ var Game = {
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
      
 
-     if (player.y > game.camera.y + game.camera.height)
+     if (player.y > game.camera.y + game.camera.height || player.y > flames.y)
      {
        this.gameOverScore();
-       console.log('death reson: out of camera sight ');
+       console.log('death reason: burned ');
      }
 
      //call function to print updated score
@@ -291,7 +299,7 @@ var Game = {
        platformPool.enableBody = true;
        //creating 10
      for (var i= 0; i < 7; i++){
-        var randomX =game.rnd.integerInRange(0, game.world.width -50);
+        var randomX =game.rnd.integerInRange(0, game.world.width -80);
         var randomY = initialWorldHeight -100 *i;
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
@@ -299,7 +307,7 @@ var Game = {
         ledge.body.immovable = true;
         ledge.width =80;
      }
-    },
+    }, 
 
     //generate a spring on every 5th ledge
     generateSpring: function() {
@@ -404,6 +412,10 @@ var Game = {
         game.paused = true;
       }
     },
+
+    ledgeOverlap: function(){
+      console.log('got ya');
+    }
 
     
     
