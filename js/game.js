@@ -2,7 +2,7 @@
 
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  spring, spring_collapsed, stonesPool,flames,jump, collect, spring,bgMusic,score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring,initialWorldHeight,mute,unmute,playPause;
+ fireBall, raSpawn,hitSpring,initialWorldHeight,mute,unmute,pause_label;
 
  //variables that holds value
 hitSpring = false;
@@ -15,7 +15,7 @@ var Game = {
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
-        game.load.spritesheet('playPause','./assets/images/pausePlay.png',245,512);
+        game.load.spritesheet('pause','./assets/images/pausePlay.png',245,512);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
         game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
@@ -40,6 +40,7 @@ var Game = {
         springSound = game.add.audio('springSound');
         bgMusic = game.add.audio('bgMusic');
         bgMusic.play();
+        bgMusic.loopFull();
 
         //scaling options
         game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -57,10 +58,22 @@ var Game = {
 
 
         //play and pause
-        playPause = game.add.button(245,0,'playPause',this.pauseFunction,this);
-        playPause.frame = 1;
-        playPause.scale.setTo(0.07);
-        playPause.fixedToCamera =true;
+        pause_label = game.add.button(245,0,'pause',this.pauseFunction,this);
+        pause_label.scale.setTo(0.07);
+        pause_label.fixedToCamera =true;
+        pause_label.inputEnabled = true;
+        pause_label.events.onInputUp.add(function () {
+          game.paused = true;
+          pause_label.frame = 0;
+  
+      });
+        // Add a input listener to return from being paused
+        game.input.onDown.add(unpause, self);
+        function unpause(event){
+            pause_label.frame = 1;
+            game.unpaused = false;
+          
+        }
 
         //flame animation
         flames = game.add.sprite(0, 400, 'flames');
@@ -123,9 +136,7 @@ var Game = {
 
          function soundOFF() {
            game.sound.volume = 0;
-
            mute.destroy();
-
            unmute = this.game.add.sprite(270,8,"unmute");
            unmute.anchor.set(0, 0);
            unmute.scale.setTo(0.8);
@@ -440,15 +451,8 @@ var Game = {
 
 
 
-    pauseFunction: function(){
-      if (playPause.frame = 1){
-        game.paused = true;
-      }
-    },
 
-    ledgeOverlap: function(){
-      console.log('got ya');
-    }
+    
 
 
 
