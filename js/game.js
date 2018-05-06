@@ -14,7 +14,7 @@ initialWorldHeight = 500;
 
 
 var Game = {
-      
+
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
@@ -34,7 +34,7 @@ var Game = {
     },
 
     create: function(){
-        
+
         //bg color
         game.stage.backgroundColor = "#e8c11c";
         //sounds
@@ -56,6 +56,7 @@ var Game = {
         this.generatePlatforms();
         this.createPlayer();
         this.generateStones();
+        this.generateSpring();
 
 
         //play and pause
@@ -63,7 +64,7 @@ var Game = {
         playPause.frame = 1;
         playPause.scale.setTo(0.07);
         playPause.fixedToCamera =true;
-       
+
         //flame animation
         flames = game.add.sprite(0, 400, 'flames');
         flames.scale.setTo(0.5);
@@ -73,7 +74,7 @@ var Game = {
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-      
+
          /*MISHO*/
          //REMINDER::REMOVE COMMENTS LATER PLEASE
          // Springs are in front of fire
@@ -88,7 +89,7 @@ var Game = {
 
 
 
-         //scoring 
+         //scoring
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: 'rgba(75, 101, 125, 0.5)',
@@ -150,17 +151,16 @@ var Game = {
 
     update: function(){
 
-     
-
-
       fpsCounter++;
-      console.log(game.time.fps);
-      
 
-          /***************Springs COMMENTED OUT*********/
+      //move springs when out of sight
+        if (spring.y >= game.camera.y+game.camera.height){
+          //place on ledge 6 or 7
+          var i = game.rnd.integerInRange(5,6);
+          spring.x = platformPool.children[i].x + 30;
+          spring.y = platformPool.children[i].y - 17;
+        }
 
-      //generate Springs
-     // this.generateSpring();
 
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
@@ -175,14 +175,14 @@ var Game = {
     {
         MaxCameraY = game.camera.y;
     }
-    //if players y coordinate becomes more that the cameraslimit camera wont follow. 
+    //if players y coordinate becomes more that the cameraslimit camera wont follow.
     //this is how the camera would always go up
     if(Math.abs(player.y - MaxCameraY) > 0)
     {
         game.camera.y = MaxCameraY;
 
     }
-    
+
 
 
      /*********************SCORE****************/
@@ -192,7 +192,7 @@ var Game = {
           score++; // <<< change this for +(more) on every update
           fpsCounter = 0;
         }
-    
+
 
 /********************FIREBALL********************/
     // generate a random spawn frequency number the fireballs
@@ -216,6 +216,7 @@ var Game = {
         fireBall = undefined;
       }
     }
+
 /******************COLLISIONS*************************/
     var hitBall = game.physics.arcade.collide(player, fireBall);
 
@@ -226,7 +227,7 @@ var Game = {
 
     //stone checkCollision
     game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
-   
+
      //stones with platform collision
     for (var i = 0; i < stonesPool.children.length; i++) {
       //ceck for every stone in the stones pool and move it if it overlaps
@@ -235,7 +236,7 @@ var Game = {
     };
 
 
-    
+
      //recreate stones when players y postion is past the last created stone
      if( player.y < stonesPool.children[stonesPool.children.length-3].y){
       this.generateStones();
@@ -249,7 +250,7 @@ var Game = {
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
     //if the player hits the spring
-    if (hitSpring) {
+    if (hitSpring && player.body.touching.down) {
       //set the velocity to let the player jump higher
       player.body.velocity.y = -600;
       player.body.gravity.y = 400;
@@ -302,7 +303,7 @@ var Game = {
       //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
       //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
-     
+
      //if the player falls in the fire game is over
      if (player.y > game.camera.y + game.camera.height || player.y > flames.y)
      {
@@ -313,12 +314,13 @@ var Game = {
      //call function to print updated score
      this.updateScore();
     },
+
     render: function() {
 
       // Camera
       //game.debug.cameraInfo(game.camera, 32, 32);
-      game.debug.spriteInfo(ledge,32,32);
-  
+      //game.debug.spriteInfo(ledge,32,32);
+
   },
 
     createPlayer: function(){
@@ -356,14 +358,14 @@ var Game = {
         ledge.body.immovable = true;
         ledge.width =80;
      }
-    }, 
+    },
 
     //generate a spring on every 5th ledge
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + 15;
-        y = platformPool.children[5].y -22;
+        x = platformPool.children[5].x + 30;
+        y = platformPool.children[5].y -17;
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
@@ -372,18 +374,8 @@ var Game = {
         //enable body on spring
         game.physics.arcade.enable(spring);
         spring.enableBody = true;
+        spring.immovable = true;
       }
-
-    },
-
-    //collapse the spring when player hits it
-    collapseSpring: function() {
-      y = platformPool.children[5].y -13;
-      x = platformPool.children[5].x + 15;
-      spring.destroy();
-      spring = game.add.sprite(x ,y ,'spring_collapsed');
-      spring.scale.x = .4;
-      spring.scale.y = .4;
     },
 
     //generate the stones to collect
@@ -409,7 +401,7 @@ var Game = {
        redStone =  game.add.sprite(x,y,'stone_red');
        redStone.scale.setTo(0.09,0.09);
         stonesPool.add(redStone);
-        
+
      }
     },
 
@@ -449,7 +441,7 @@ var Game = {
       bgMusic.stop();
     },
 
-   
+
 
     pauseFunction: function(){
       if (playPause.frame = 1){
@@ -461,8 +453,8 @@ var Game = {
       console.log('got ya');
     }
 
-    
-    
+
+
 
 
 
