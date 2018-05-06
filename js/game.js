@@ -5,9 +5,6 @@ var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
  fireBall, raSpawn,hitSpring,initialWorldHeight,mute,unmute,pause_label;
 
  //variables that holds value
-topScores = [0,0,0,0,0];
-score = 0
-fpsCounter = 0;
 hitSpring = false;
 MaxCameraY = 0;
 initialWorldHeight = 500;
@@ -103,6 +100,9 @@ var Game = {
 
 
          //scoring
+         topScores = [0,0,0,0,0];
+         score = 0
+         fpsCounter = 0;
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: 'rgba(75, 101, 125, 0.5)',
