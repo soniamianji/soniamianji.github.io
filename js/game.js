@@ -174,6 +174,14 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
+
+        /*********************SCORE****************/
+           //update score
+           //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
+           if (fpsCounter > 10) { // <<< change this this for (+1) faster
+             score++; // <<< change this for +(more) on every update
+             fpsCounter = 0;
+           }
     }
     //if players y coordinate becomes more that the cameraslimit camera wont follow.
     //this is how the camera would always go up
@@ -182,17 +190,6 @@ var Game = {
         game.camera.y = MaxCameraY;
 
     }
-
-
-
-     /*********************SCORE****************/
-        //update score
-        //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
-        if (fpsCounter > 10) { // <<< change this this for (+1) faster
-          score++; // <<< change this for +(more) on every update
-          fpsCounter = 0;
-        }
-
 
 /********************FIREBALL********************/
     // generate a random spawn frequency number the fireballs
