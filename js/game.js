@@ -265,6 +265,19 @@ var Game = {
             ledge.x = game.rnd.integerInRange(0, game.world.width - 80);
             ledge.y = yStorage ;
 
+            if (score > 100)
+            {
+              ledge.body.velocity.setTo(50,0);
+              ledge.body.collideWorldBounds = true;
+              ledge.body.bounce.set(1);
+              ledge.width = 50;
+              }
+              if (score > 500 ){
+                ledge.body.velocity.setTo(100,0);
+              ledge.body.collideWorldBounds = true;
+               ledge.body.bounce.set(1);
+              }
+
      } },this);
 
      /***************Movement*****************/
@@ -310,6 +323,11 @@ var Game = {
 
      //call function to print updated score
      this.updateScore();
+
+
+    
+
+     
     },
 
     render: function() {
@@ -356,6 +374,8 @@ var Game = {
         ledge.width =80;
      }
     },
+
+
 
     //generate a spring on every 5th ledge
     generateSpring: function() {
