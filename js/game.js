@@ -6,7 +6,6 @@ var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
 
  //variables that holds value
 hitSpring = false;
-MaxCameraY = 0;
 initialWorldHeight = 500;
 
 
@@ -31,6 +30,9 @@ var Game = {
     },
 
     create: function(){
+
+        // should be reset on restart of the game
+        MaxCameraY = 0;
 
         //bg color
         game.stage.backgroundColor = "#e8c11c";
@@ -65,14 +67,14 @@ var Game = {
         pause_label.events.onInputUp.add(function () {
           game.paused = true;
           pause_label.frame = 0;
-  
+
       });
         // Add a input listener to return from being paused
         game.input.onDown.add(unpause, self);
         function unpause(event){
             pause_label.frame = 1;
             game.unpaused = false;
-          
+
         }
 
         //flame animation
@@ -87,7 +89,7 @@ var Game = {
          
          //scoring
          topScores = [0,0,0,0,0];
-         score = 0
+         score = 0;
          fpsCounter = 0;
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
@@ -171,6 +173,15 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
+        console.log(score);
+
+        /*********************SCORE****************/
+           //update score
+           //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
+           if (fpsCounter > 10) { // <<< change this this for (+1) faster
+             score++; // <<< change this for +(more) on every update
+             fpsCounter = 0;
+           }
     }
     //if players y coordinate becomes more that the cameraslimit camera wont follow.
     //this is how the camera would always go up
@@ -179,17 +190,6 @@ var Game = {
         game.camera.y = MaxCameraY;
 
     }
-
-
-
-     /*********************SCORE****************/
-        //update score
-        //you are going up for 1 sec => it doesn't update 60 times (thus +60 points) but rather only 10 times += 10 points (27:3)
-        if (fpsCounter > 10) { // <<< change this this for (+1) faster
-          score++; // <<< change this for +(more) on every update
-          fpsCounter = 0;
-        }
-
 
 /********************FIREBALL********************/
     // generate a random spawn frequency number the fireballs
@@ -441,7 +441,7 @@ var Game = {
 
 
 
-    
+
 
 
 
