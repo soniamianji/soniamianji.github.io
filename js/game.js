@@ -84,21 +84,7 @@ var Game = {
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-
-         /*MISHO*/
-         //REMINDER::REMOVE COMMENTS LATER PLEASE
-         // Springs are in front of fire
-         // Maybe display highest score at all times?
-
-         // Donald sometimes dies for no reason PROBALY BECAUSE FIREBALLS ARE SOMETIMES IN THE MIIDLE
-         // Springs touched from the top
-         //NOT THE CACHE
-         // Donald sometimes dies for no reason?
-         //fireball timer should be added so there is no fire ball for atleast
-         // 15 sec after the game starts
-
-
-
+         
          //scoring
          topScores = [0,0,0,0,0];
          score = 0
