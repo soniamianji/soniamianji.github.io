@@ -136,7 +136,7 @@ var Game = {
         game.input.onDown.add(unpause, self);
         function unpause(event){
             pause_label.frame = 1;
-            game.unpaused = false;
+            game.paused = false;
 
         }
 
