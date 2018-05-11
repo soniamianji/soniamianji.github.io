@@ -86,7 +86,7 @@ var Game = {
 
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-         
+
          //scoring
          topScores = [0,0,0,0,0];
          score = 0;
@@ -325,9 +325,9 @@ var Game = {
      this.updateScore();
 
 
-    
 
-     
+
+
     },
 
     render: function() {
@@ -391,7 +391,7 @@ var Game = {
         //enable body on spring
         game.physics.arcade.enable(spring);
         spring.enableBody = true;
-        spring.immovable = true;
+        spring.body.immovable = true;
       }
     },
 
