@@ -173,7 +173,7 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
-        console.log(score);
+//        console.log(score);
 
         /*********************SCORE****************/
            //update score
@@ -239,7 +239,8 @@ var Game = {
       this.generateStones();
      }
 
-
+     //spring-platform Collision
+     var springLock = game.physics.arcade.collide(spring, platformPool, this.lockIt, null, this);
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
@@ -330,6 +331,19 @@ var Game = {
 
     },
 
+    preRender: function() {
+      if (this.game.paused)
+      { //  Because preRender still runs even if your game pauses!
+        return;
+      }
+
+      if (this.locked) {
+        spring.x += this.lockedTo.deltaX;
+        spring.y = this.lockedTo.y - 17;
+      }
+
+    },
+
     render: function() {
 
       // Camera
@@ -381,14 +395,14 @@ var Game = {
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + 30;
+        x = platformPool.children[5].x + (platformPool.children[5].width/2) -20;
         y = platformPool.children[5].y -17;
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
         spring.scale.setTo(.3);
 
-        //enable body on spring
+        //enable body on spring and make them unmovable
         game.physics.arcade.enable(spring);
         spring.enableBody = true;
         spring.body.immovable = true;
@@ -458,14 +472,10 @@ var Game = {
       bgMusic.stop();
     },
 
-
-
-
-
-
-
-
-
-
-
+    //lock springs function
+    lockIt: function(spring, platform) {
+      this.locked = true;
+      this.lockedTo = platform;
+      platform.springLocked = true;
+    },
   };
