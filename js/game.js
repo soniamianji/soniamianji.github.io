@@ -1,12 +1,75 @@
+/********************* CONTENTS *********************/
+/****************************************************/
+
+/*
+  1. Global Variables
+
+  2. Value Variables
+
+  3. Preload
+      a) Sprites and Sounds
+
+  4. Create
+      a) World Setup
+          I.    Platforms
+          II.   Stones
+          III.  Springs
+          IV.   Player
+          V.    Fire
+      b) Play and Pause
+      c) Controls
+      d) Scoring
+      e) Volume Controls
+
+  5.  Update
+        a) Move Springs
+        b) Set Worldbounds
+        b) Move Camera
+            I. Raise Score
+        c) Generate Fireballs
+        d) Collisions
+            I. Fireball
+            II. Stone
+            III. Platform
+            IV. Spring
+        e) Move Ledges
+        f) Move Player
+        g) Kill Player in Flames
+        h) Update Score
+
+  6.   preRender
+        a) Move locked Springs
+
+  7.  Render
+        a) Debug
+
+  8. Functions
+        a) makeFire
+        b) createPlayer
+        c) generatePLatforms
+        d) generateSpring
+        e) lockIt
+        f) generateStones
+        g) collectStone
+        h) updateScore
+        i) gameOverScore
+*/
+/****************************************************/
+/****************************************************/
+
+
+
+
+
 //global variables
 
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
- spring, spring_collapsed, stonesPool,flames,jump, collect, spring,bgMusic,score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn,hitSpring,initialWorldHeight,mute,unmute,pause_label;
+ spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
+ fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label;
 
- //variables that holds value
-hitSpring = false;
-initialWorldHeight = 500;
+//variables that holds value
+var hitSpring = false;
+var initialWorldHeight = 500;
 
 
 var Game = {
@@ -17,7 +80,6 @@ var Game = {
         game.load.spritesheet('pause','./assets/images/pausePlay.png',245,512);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
-        game.load.image('spring_collapsed', './assets/images/spring_collapsed.png');
         game.load.image('stone_red', './assets/images/water.png');
         game.load.audio('jump', './assets/sounds/jump.mp3');
         game.load.audio('collect', './assets/sounds/collect.mp3');
@@ -51,12 +113,13 @@ var Game = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
-          //physic enabled
+        //physic enabled
         game.physics.startSystem(Phaser.Physics.ARCADE);
         this.generatePlatforms();
-        this.createPlayer();
         this.generateStones();
         this.generateSpring();
+        this.createPlayer();
+        this.makeFire();
 
 
         //play and pause
@@ -73,20 +136,13 @@ var Game = {
         game.input.onDown.add(unpause, self);
         function unpause(event){
             pause_label.frame = 1;
-            game.unpaused = false;
+            game.paused = false;
 
         }
 
-        //flame animation
-        flames = game.add.sprite(0, 400, 'flames');
-        flames.scale.setTo(0.5);
-        flames.animations.add('fire', [0,1,2], 3, true);
-        flames.animations.play('fire');
-        flames.fixedToCamera = true;
-
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
-         
+
          //scoring
          topScores = [0,0,0,0,0];
          score = 0;
@@ -146,8 +202,6 @@ var Game = {
 
         },
 
-
-
     update: function(){
 
       fpsCounter++;
@@ -173,7 +227,7 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
-        console.log(score);
+//        console.log(score);
 
         /*********************SCORE****************/
            //update score
@@ -191,7 +245,9 @@ var Game = {
 
     }
 
-/********************FIREBALL********************/
+/********************* FIREBALL ********************/
+/****************************************************/
+
     // generate a random spawn frequency number the fireballs
     raSpawn = Math.floor(Math.random() * 6);
     //spawn a fireball only if there isn't one already
@@ -214,7 +270,11 @@ var Game = {
       }
     }
 
-/******************COLLISIONS*************************/
+/********************* COLLISIONS ********************/
+/****************************************************/
+
+  /********************* FIREBALL COLLISION ********************/
+
     var hitBall = game.physics.arcade.collide(player, fireBall);
 
     if (hitBall) {
@@ -222,30 +282,38 @@ var Game = {
       console.log("death reason : hitBall");
     }
 
+  /********************* STONE COLLISION ********************/
+
     //stone checkCollision
     game.physics.arcade.overlap(player, stonesPool, this.collectStone, null, this);
 
      //stones with platform collision
     for (var i = 0; i < stonesPool.children.length; i++) {
-      //ceck for every stone in the stones pool and move it if it overlaps
-       stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
-       if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
-    };
+      //dont move overlapping platform if ledges start moving
+      if (score < 100) {
+        //ceck for every stone in the stones pool and move it if it overlaps
+         stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
+         if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
+      }
+    }
 
-
-
-     //recreate stones when players y postion is past the last created stone
-     if( player.y < stonesPool.children[stonesPool.children.length-3].y){
+    //recreate stones when players y postion is past the last created stone
+    if( player.y < stonesPool.children[stonesPool.children.length-3].y){
       this.generateStones();
-     }
+    }
 
 
+    /********************* PLATFORM COLLISION ********************/
 
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
 
+
+    /********************* SPRING COLLISION ********************/
+
     //spring Collision
     var hitSpring = game.physics.arcade.collide(player,spring);
+
     //if the player hits the spring
     if (hitSpring && player.body.touching.down) {
       //set the velocity to let the player jump higher
@@ -253,12 +321,20 @@ var Game = {
       player.body.gravity.y = 400;
       springSound.play();
       //this.collapseSpring();
-    };
+    }
+
+    //spring-platform Collision
+    var springLock = game.physics.arcade.collide(spring, platformPool, this.lockIt, null, this);
 
 
+/************ REGENRATING LEDGES ********************/
+/**************************************************/
 
+<<<<<<< HEAD
 
 /************REGENRATING LEDGES******************/
+=======
+>>>>>>> dc72d244d3d9ce313cde6a3b95b11e0939903f19
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height ){
@@ -283,7 +359,9 @@ var Game = {
 
      } },this);
 
-     /***************Movement*****************/
+/********************* MOVEMENT ********************/
+/**************************************************/
+
      if (cursors.left.isDown)
      {
          //  Move to the left
@@ -329,16 +407,43 @@ var Game = {
      this.updateScore();
 
 
+<<<<<<< HEAD
      
+=======
+    },
+
+    preRender: function() {
+
+      //lock springs
+      if (this.game.paused)
+      { //  Because preRender still runs even if your game pauses!
+        return;
+      }
+
+      if (this.locked) {
+        spring.x += this.lockedTo.deltaX;
+        spring.y = this.lockedTo.y - 17;
+      }
+>>>>>>> dc72d244d3d9ce313cde6a3b95b11e0939903f19
     },
 
     render: function() {
-
       // Camera
       //game.debug.cameraInfo(game.camera, 32, 32);
       //game.debug.spriteInfo(ledge,32,32);
+    },
 
-  },
+/********************* PLAYER & PLATFROMS & FIRE ********************/
+/**************************************************/
+
+    makeFire: function() {
+      //flame animation
+      flames = game.add.sprite(0, 400, 'flames');
+      flames.scale.setTo(0.5);
+      flames.animations.add('fire', [0,1,2], 3, true);
+      flames.animations.play('fire');
+      flames.fixedToCamera = true;
+    },
 
     createPlayer: function(){
         player = game.add.sprite(platformPool.children[3].x, platformPool.children[3].y-100, 'hero');
@@ -373,17 +478,18 @@ var Game = {
         platformPool.add(ledge);
         ledge.scale.setTo(0.1,0.1);
         ledge.body.immovable = true;
-        ledge.width =80;
+        ledge.width = 80;
      }
     },
 
-
+/********************* SPRINGS ********************/
+/**************************************************/
 
     //generate a spring on every 5th ledge
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + 30;
+        x = platformPool.children[5].x + (platformPool.children[5].width/2) -20;
         y = platformPool.children[5].y -17;
 
 
@@ -391,12 +497,22 @@ var Game = {
         spring = game.add.sprite(x ,y ,'spring');
         spring.scale.setTo(.3);
 
-        //enable body on spring
+        //enable body on spring and make them unmovable
         game.physics.arcade.enable(spring);
         spring.enableBody = true;
-        spring.immovable = true;
+        spring.body.immovable = true;
       }
     },
+
+    //lock springs function
+    lockIt: function(spring, platform) {
+      this.locked = true;
+      this.lockedTo = platform;
+      platform.springLocked = true;
+    },
+
+  /********************* STONES ********************/
+  /**************************************************/
 
     //generate the stones to collect
     generateStones: function() {
@@ -409,6 +525,7 @@ var Game = {
 
      //create 20 stones
      stonesDistance = 0;
+
      for (var i = 0; i < 20; i++){
        //distance between the stones increases stone by stone
        stonesDistance -= 250;
@@ -421,7 +538,6 @@ var Game = {
        redStone =  game.add.sprite(x,y,'stone_red');
        redStone.scale.setTo(0.09,0.09);
         stonesPool.add(redStone);
-
      }
     },
 
@@ -431,6 +547,9 @@ var Game = {
       score+=10;
       redStone.kill();
     },
+
+/********************* SCORE **********************/
+/**************************************************/
 
     /*MISHO*/
     //print the score
@@ -462,13 +581,4 @@ var Game = {
     },
 
 
-
-
-
-
-
-
-
-
-
-  };
+};
