@@ -257,6 +257,7 @@ var Game = {
 
 
 
+
 /************REGENRATING LEDGES******************/
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
@@ -270,12 +271,14 @@ var Game = {
               ledge.body.velocity.setTo(50,0);
               ledge.body.collideWorldBounds = true;
               ledge.body.bounce.set(1);
-              ledge.width = 50;
+
               }
               if (score > 500 ){
                 ledge.body.velocity.setTo(100,0);
               ledge.body.collideWorldBounds = true;
                ledge.body.bounce.set(1);
+               ledge.width = 50;
+              ledge.scale.setTo(0.09)
               }
 
      } },this);
@@ -321,11 +324,10 @@ var Game = {
        console.log('death reason: burned ');
      }
 
+
      //call function to print updated score
      this.updateScore();
 
-
-    
 
      
     },
@@ -383,6 +385,7 @@ var Game = {
         //get platform coordinates
         x = platformPool.children[5].x + 30;
         y = platformPool.children[5].y -17;
+
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
