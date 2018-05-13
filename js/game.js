@@ -339,7 +339,7 @@ var Game = {
             ledge.y = yStorage -100;
             console.log( yStorage);
 
-            if (score > 100 && ledge.postion.y != ledge.PreviousPosition.y)
+            if (score > 100)
             { 
 
               ledge.body.velocity.setTo(50,0);
