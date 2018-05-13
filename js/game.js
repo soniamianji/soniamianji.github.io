@@ -128,8 +128,8 @@ var Game = {
         pause_label.fixedToCamera =true;
         pause_label.inputEnabled = true;
         pause_label.events.onInputUp.add(function () {
-          game.paused = true;
-          pause_label.frame = 0;
+        game.paused = true;
+        pause_label.frame = 0;
 
       });
         // Add a input listener to return from being paused
@@ -330,35 +330,40 @@ var Game = {
 /************ REGENRATING LEDGES ********************/
 /**************************************************/
 
-<<<<<<< HEAD
 
-/************REGENRATING LEDGES******************/
-=======
->>>>>>> dc72d244d3d9ce313cde6a3b95b11e0939903f19
     //foreachalive applies the function for each children of the group
     platformPool.forEachAlive(function(ledge){
         if( ledge.y >= game.camera.y+game.camera.height ){
-            yStorage = ledge.y - 600 - 50;
-            ledge.x = game.rnd.integerInRange(0, game.world.width - 80);
-            ledge.y = yStorage ;
+            yStorage = ledge.y - 600;
+            ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
+            ledge.y = yStorage -100;
+            console.log( yStorage);
 
-            if (score > 100)
-            {
+            if (score > 100 && ledge.postion.y != ledge.PreviousPosition.y)
+            { 
+
               ledge.body.velocity.setTo(50,0);
               ledge.body.collideWorldBounds = true;
               ledge.body.bounce.set(1);
-
               }
-              if (score > 500 ){
-                ledge.body.velocity.setTo(100,0);
+
+              if (score > 200 )
+              {
+              ledge.body.velocity.setTo(100,0) ;
               ledge.body.collideWorldBounds = true;
-               ledge.body.bounce.set(1);
-               ledge.width = 50;
-              ledge.scale.setTo(0.09)
+              ledge.body.bounce.set(1);
+              }
+              if (score > 300 )
+              {
+            
+              ledge.body.velocity.setTo(250,0) ;
+              ledge.body.collideWorldBounds = true;
+              ledge.body.bounce.set(1);
               }
 
      } },this);
 
+    
 /********************* MOVEMENT ********************/
 /**************************************************/
 
@@ -384,7 +389,7 @@ var Game = {
      {
          player.body.velocity.y = -300;
          player.body.gravity.y = 400;
-           jump.play();
+          jump.play();
      }
 
      // wrap world coordinated so that you can warp from left to right and right to left
@@ -407,9 +412,6 @@ var Game = {
      this.updateScore();
 
 
-<<<<<<< HEAD
-     
-=======
     },
 
     preRender: function() {
@@ -424,18 +426,11 @@ var Game = {
         spring.x += this.lockedTo.deltaX;
         spring.y = this.lockedTo.y - 17;
       }
->>>>>>> dc72d244d3d9ce313cde6a3b95b11e0939903f19
-    },
-
-    render: function() {
-      // Camera
-      //game.debug.cameraInfo(game.camera, 32, 32);
-      //game.debug.spriteInfo(ledge,32,32);
     },
 
 /********************* PLAYER & PLATFROMS & FIRE ********************/
 /**************************************************/
-
+    
     makeFire: function() {
       //flame animation
       flames = game.add.sprite(0, 400, 'flames');
@@ -454,7 +449,7 @@ var Game = {
         game.physics.arcade.enable(player);
         player.anchor.setTo(0.5,0,5);
         player.scale.setTo(0.3,0.3);
-        player.body.gravity.y = 300;
+        player.body.gravity.y = 400;
         player.body.collideWorldBounds = false;
         player.body.checkCollision.up = false;
         player.body.checkCollision.left = false;
@@ -472,13 +467,13 @@ var Game = {
        //creating 10
 
      for (var i= 0; i < 7; i++){
-        var randomX =game.rnd.integerInRange(0, game.world.width -80);
-        var randomY = initialWorldHeight -100 *i;
+        var randomX =game.rnd.integerInRange(0, game.world.width -70);
+        var randomY = initialWorldHeight- 100 *i;
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
-        ledge.scale.setTo(0.1,0.1);
+        ledge.scale.setTo(0.09,0.09);
         ledge.body.immovable = true;
-        ledge.width = 80;
+        ledge.width = 70;
      }
     },
 
