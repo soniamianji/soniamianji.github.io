@@ -3,6 +3,8 @@
 var Menu = {
 
     preload : function() {
+        //center
+        this.game.scale.pageAlignHorizontally = true;this.game.scale.pageAlignVertically = true;this.game.scale.refresh();
         //load background image
         game.load.image('menu', './assets/images/menu.png');
         //load flame sprite sheet
