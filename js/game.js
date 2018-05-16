@@ -65,7 +65,7 @@
 
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,bg,
  spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label;
+ fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label,timerBall;
 
 //variables that holds value
 var hitSpring = false;
@@ -146,6 +146,7 @@ var Game = {
          topScores = [0,0,0,0,0];
          score = 0;
          fpsCounter = 0;
+         timerBall = 300;
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: '#ff0000',
@@ -204,6 +205,9 @@ var Game = {
     update: function(){
 
       fpsCounter++;
+      if (timerBall > 0) {
+        timerBall--;
+      }
 
       //move springs when out of sight
         if (spring.y >= game.camera.y+game.camera.height){
@@ -246,7 +250,7 @@ var Game = {
 
 /********************* FIREBALL ********************/
 /****************************************************/
-
+  if (timerBall==0) {
     // generate a random spawn frequency number the fireballs
     raSpawn = Math.floor(Math.random() * 6);
     //spawn a fireball only if there isn't one already
@@ -268,6 +272,8 @@ var Game = {
         fireBall = undefined;
       }
     }
+  }
+
 
 /********************* COLLISIONS ********************/
 /****************************************************/
@@ -331,18 +337,18 @@ var Game = {
 
 
     //foreachalive applies the function for each children of the group
-  
+
     platformPool.forEachAlive(function(ledge){
 
         if( ledge.y >= game.camera.y+game.camera.height ){
-          
+
           ledge.y -=  (600 + 100);
 
           ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
           console.log(ledge.y);
           //ledge.body.collideWorldBounds = true;
 
-        
+
 
 
 
@@ -352,26 +358,26 @@ var Game = {
              /*if(ledge.body.velocity.x == 50|| ledge.body.velocity.x == -50){
                 console.log('got it til here');
                 console.log(ledge.x);
-                
+
                            if( ledge.body.velocity.x == 50 && ledge.x >200){
                             ledge.body.velocity.setTo(-50,0);
                             }
                             if(ledge.body.velocity.x == -50 && ledge.x < 0){
-                
+
                               ledge.body.velocity.setTo(50,0);
-                
+
                             }}/*
 
              console.log(ledge.body.velocity.x);*/
 
-             
+
             // game.world.wrap(ledge,0,false,true,false);
              //ledge.body.collideWorldBounds = false;
             ledge.body.collideWorldBounds = true;
 
               ledge.body.bounce.set(1);
               }
-         
+
               if (score > 200 )
               {
               ledge.body.velocity.setTo(100,0) ;
@@ -380,18 +386,18 @@ var Game = {
               }
               if (score > 300 )
               {
-            
+
               ledge.body.velocity.setTo(250,0) ;
               ledge.body.collideWorldBounds = true;
               ledge.body.bounce.set(1);
               }
 
       }},this);
-     
-   
-    
 
-    
+
+
+
+
 /********************* MOVEMENT ********************/
 /**************************************************/
 
@@ -458,7 +464,7 @@ var Game = {
 
 /********************* PLAYER & PLATFROMS & FIRE ********************/
 /**************************************************/
-    
+
     makeFire: function() {
       //flame animation
       flames = game.add.sprite(0, 400, 'flames');
@@ -574,7 +580,7 @@ var Game = {
 /********************* SCORE **********************/
 /**************************************************/
 
-    
+
     //print the score
     updateScore: function() {
         scoreText.destroy();
@@ -605,11 +611,3 @@ var Game = {
 
 
 };
-
-
-
-
-
-
-
-
