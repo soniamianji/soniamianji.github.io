@@ -63,14 +63,14 @@
 
 //global variables
 
-var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,
+var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,bg,
  spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
  fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label;
 
 //variables that holds value
 var hitSpring = false;
 var initialWorldHeight = 500;
-
+var goLeft = false;
 
 var Game = {
 
@@ -80,7 +80,7 @@ var Game = {
         game.load.spritesheet('pause','./assets/images/pausePlay.png',245,512);
         game.load.image('base', './assets/images/skulls.png');
         game.load.image('spring', './assets/images/spring.png');
-        game.load.image('stone_red', './assets/images/water.png');
+        game.load.image('stone_red', './assets/images/whiskey.png');
         game.load.audio('jump', './assets/sounds/jump.mp3');
         game.load.audio('collect', './assets/sounds/collect.mp3');
         game.load.audio('springSound', './assets/sounds/springSound.mp3');
@@ -92,12 +92,11 @@ var Game = {
     },
 
     create: function(){
-
         // should be reset on restart of the game
         MaxCameraY = 0;
 
-        //bg color
-        game.stage.backgroundColor = "#e8c11c";
+        /*//bg color
+        game.stage.backgroundColor = "#e8c11c";*/
         //sounds
         jump = game.add.audio('jump');
         collect = game.add.audio('collect');
@@ -149,7 +148,7 @@ var Game = {
          fpsCounter = 0;
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
-             fill: 'rgba(75, 101, 125, 0.5)',
+             fill: '#ff0000',
              align: "center",
          });
          scoreText.anchor.set(0, 0);
@@ -332,21 +331,47 @@ var Game = {
 
 
     //foreachalive applies the function for each children of the group
+  
     platformPool.forEachAlive(function(ledge){
-        if( ledge.y >= game.camera.y+game.camera.height ){
-            yStorage = ledge.y - 600;
-            ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
-            ledge.y = yStorage -100;
-            console.log( yStorage);
 
-            if (score > 100)
-            { 
+        if( ledge.y >= game.camera.y+game.camera.height ){
+          
+          ledge.y -=  (600 + 100);
+
+          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
+          console.log(ledge.y);
+          //ledge.body.collideWorldBounds = true;
+
+        
+
+
+
+            if (score >20){
 
               ledge.body.velocity.setTo(50,0);
-              ledge.body.collideWorldBounds = true;
+             /*if(ledge.body.velocity.x == 50|| ledge.body.velocity.x == -50){
+                console.log('got it til here');
+                console.log(ledge.x);
+                
+                           if( ledge.body.velocity.x == 50 && ledge.x >200){
+                            ledge.body.velocity.setTo(-50,0);
+                            }
+                            if(ledge.body.velocity.x == -50 && ledge.x < 0){
+                
+                              ledge.body.velocity.setTo(50,0);
+                
+                            }}/*
+
+             console.log(ledge.body.velocity.x);*/
+
+             
+            // game.world.wrap(ledge,0,false,true,false);
+             //ledge.body.collideWorldBounds = false;
+            ledge.body.collideWorldBounds = true;
+
               ledge.body.bounce.set(1);
               }
-
+         
               if (score > 200 )
               {
               ledge.body.velocity.setTo(100,0) ;
@@ -361,7 +386,10 @@ var Game = {
               ledge.body.bounce.set(1);
               }
 
-     } },this);
+      }},this);
+     
+   
+    
 
     
 /********************* MOVEMENT ********************/
@@ -531,7 +559,7 @@ var Game = {
 
        //add stones to group and scale them
        redStone =  game.add.sprite(x,y,'stone_red');
-       redStone.scale.setTo(0.09,0.09);
+       redStone.scale.setTo(0.15,0.15);
         stonesPool.add(redStone);
      }
     },
@@ -546,13 +574,13 @@ var Game = {
 /********************* SCORE **********************/
 /**************************************************/
 
-    /*MISHO*/
+    
     //print the score
     updateScore: function() {
         scoreText.destroy();
         scoreText = game.add.text(14, 4, "score: "+score, {
             fontSize: "20px",
-            fill: 'rgba(75, 101, 125, 0.5)',
+            fill: '#ff0000',
             align: "center",
         });
         scoreText.anchor.set(0, 0)
@@ -577,3 +605,11 @@ var Game = {
 
 
 };
+
+
+
+
+
+
+
+
