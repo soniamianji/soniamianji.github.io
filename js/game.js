@@ -65,7 +65,7 @@
 
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,bg,
  spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
- fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label;
+ fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label,timerBall;
 
 //variables that holds value
 var hitSpring = false;
@@ -145,6 +145,7 @@ var Game = {
          topScores = [0,0,0,0,0];
          score = 0;
          fpsCounter = 0;
+         timerBall = 300;
          scoreText = game.add.text(14, 4, "score: " +score, {
              fontSize: "20px",
              fill: '#ff0000',
@@ -203,6 +204,9 @@ var Game = {
     update: function(){
 
       fpsCounter++;
+      if (timerBall > 0) {
+        timerBall--;
+      }
 
       //move springs when out of sight
         if (spring.y >= game.camera.y+game.camera.height){
@@ -245,7 +249,7 @@ var Game = {
 
 /********************* FIREBALL ********************/
 /****************************************************/
-
+  if (timerBall==0) {
     // generate a random spawn frequency number the fireballs
     raSpawn = Math.floor(Math.random() * 6);
     //spawn a fireball only if there isn't one already
@@ -267,6 +271,8 @@ var Game = {
         fireBall = undefined;
       }
     }
+  }
+
 
 /********************* COLLISIONS ********************/
 /****************************************************/
