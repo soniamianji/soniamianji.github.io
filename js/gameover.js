@@ -5,17 +5,23 @@ var gameover = {
         // Load the needed image for this game screen.
         game.load.image('gameover', './assets/images/gameover.png');
         game.load.audio('GOSound', './assets/sounds/GO.mp3');
-
+        game.load.spritesheet('skull', './assets/images/skull_sprite.png', 134, 118, 2)
         game.load.image("mute", "./assets/images/mute.png");
         game.load.image("unmute", "./assets/images/unmute.png");
     },
 
     create : function() {
 
-        // Create button to start game like in Menu.
-      this.add.button(0, 0, 'gameover', this.startGame, this);
-       var sound = this.add.audio('GOSound');
-       sound.play();
+      // Create button to start game like in Menu
+      var goImage = this.add.button(0, 0, 'gameover', this.startGame, this);
+
+      // add the skull animation
+      var skull = game.add.sprite(83, 40, 'skull');
+      skull.animations.add('talk', [0,1], 2, true);
+      skull.animations.play('talk');
+
+      var sound = this.add.audio('GOSound');
+      sound.play();
 
        //parse the saved scores
        if (localStorage.topScores !== undefined) {

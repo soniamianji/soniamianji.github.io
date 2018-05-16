@@ -88,6 +88,7 @@ var Game = {
         game.load.image("ball", './assets/images/ball.png');
         game.load.image("mute", "./assets/images/mute.png");
         game.load.image("unmute", "./assets/images/unmute.png");
+        game.load.image('background', "./assets/images/background.png");
 
     },
 
@@ -95,8 +96,6 @@ var Game = {
         // should be reset on restart of the game
         MaxCameraY = 0;
 
-        /*//bg color
-        game.stage.backgroundColor = "#e8c11c";*/
         //sounds
         jump = game.add.audio('jump');
         collect = game.add.audio('collect');
@@ -331,18 +330,18 @@ var Game = {
 
 
     //foreachalive applies the function for each children of the group
-  
+
     platformPool.forEachAlive(function(ledge){
 
         if( ledge.y >= game.camera.y+game.camera.height ){
-          
+
           ledge.y -=  (600 + 100);
 
           ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
           console.log(ledge.y);
           //ledge.body.collideWorldBounds = true;
 
-        
+
 
 
 
@@ -352,26 +351,26 @@ var Game = {
              /*if(ledge.body.velocity.x == 50|| ledge.body.velocity.x == -50){
                 console.log('got it til here');
                 console.log(ledge.x);
-                
+
                            if( ledge.body.velocity.x == 50 && ledge.x >200){
                             ledge.body.velocity.setTo(-50,0);
                             }
                             if(ledge.body.velocity.x == -50 && ledge.x < 0){
-                
+
                               ledge.body.velocity.setTo(50,0);
-                
+
                             }}/*
 
              console.log(ledge.body.velocity.x);*/
 
-             
+
             // game.world.wrap(ledge,0,false,true,false);
              //ledge.body.collideWorldBounds = false;
             ledge.body.collideWorldBounds = true;
 
               ledge.body.bounce.set(1);
               }
-         
+
               if (score > 200 )
               {
               ledge.body.velocity.setTo(100,0) ;
@@ -380,18 +379,18 @@ var Game = {
               }
               if (score > 300 )
               {
-            
+
               ledge.body.velocity.setTo(250,0) ;
               ledge.body.collideWorldBounds = true;
               ledge.body.bounce.set(1);
               }
 
       }},this);
-     
-   
-    
 
-    
+
+
+
+
 /********************* MOVEMENT ********************/
 /**************************************************/
 
@@ -458,7 +457,7 @@ var Game = {
 
 /********************* PLAYER & PLATFROMS & FIRE ********************/
 /**************************************************/
-    
+
     makeFire: function() {
       //flame animation
       flames = game.add.sprite(0, 400, 'flames');
@@ -574,7 +573,7 @@ var Game = {
 /********************* SCORE **********************/
 /**************************************************/
 
-    
+
     //print the score
     updateScore: function() {
         scoreText.destroy();
@@ -605,11 +604,3 @@ var Game = {
 
 
 };
-
-
-
-
-
-
-
-
