@@ -142,9 +142,13 @@ var Game = {
           if (game.paused == false) {
             pause_label.frame = 0;
             game.paused = true;
+
+            if (game.sound.volume==1) { mute.kill() } else if (game.sound.volume==0) { unmute.kill() }
           } else {
             pause_label.frame = 1;
             game.paused = false;
+
+            if (game.sound.volume==1) { mute.revive() } else if (game.sound.volume==0) { unmute.revive() }
           }
         }
          //  Our controls.
