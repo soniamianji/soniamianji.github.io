@@ -36,7 +36,7 @@ var Menu = {
         }
 
         //display highest score
-        var highestScoreText = game.add.text(165, 150, "\n:"+topScores[0], {
+        var highestScoreText = game.add.text(165, 147, "\n:"+topScores[0], {
           font: 'Press Start 2P',
           fontSize: "14px",
           fill: '#ea302b',
