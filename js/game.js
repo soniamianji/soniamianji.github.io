@@ -525,13 +525,13 @@ var Game = {
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + (platformPool.children[5].width/2) -20;
+        x = platformPool.children[5].x + (platformPool.children[5].width/2) -31;//<< changed from -20
         y = platformPool.children[5].y -17;
 
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
-        spring.scale.setTo(.3);
+        spring.scale.setTo(.2); //<< changed from 0.3
 
         //enable body on spring and make them unmovable
         game.physics.arcade.enable(spring);
@@ -584,10 +584,11 @@ var Game = {
     //print the score
     updateScore: function() {
         scoreText.destroy();
-        scoreText = game.add.text(14, 4, "score: "+score, {
-            fontSize: "20px",
+        scoreText = game.add.text(14, 8, "Score:"+score, {
+            fontSize: "12px",
             fill: '#ff0000',
             align: "center",
+            font: 'Press Start 2P'
         });
         scoreText.anchor.set(0, 0)
         scoreText.fixedToCamera = true;
