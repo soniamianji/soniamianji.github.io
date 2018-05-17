@@ -121,23 +121,23 @@ var Game = {
 
 
         //play and pause
-        pause_label = game.add.button(245,0,'pause',this.pauseFunction,this);
+        pause_label = game.add.button(245,0,'pause');
         pause_label.scale.setTo(0.07);
         pause_label.fixedToCamera =true;
         pause_label.inputEnabled = true;
-        pause_label.events.onInputUp.add(function () {
-        game.paused = true;
-        pause_label.frame = 0;
+        pause_label.frame = 1;
+        // Add a input listener to add the function
+        pause_label.events.onInputDown.add(pauseF, this);
 
-      });
-        // Add a input listener to return from being paused
-        game.input.onDown.add(unpause, self);
-        function unpause(event){
+        function pauseF(){
+          if (game.paused == false) {
+            pause_label.frame = 0;
+            game.paused = true;
+          } else {
             pause_label.frame = 1;
             game.paused = false;
-
+          }
         }
-
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
 
@@ -156,7 +156,6 @@ var Game = {
 
          if (localStorage.topScores !== undefined) {
            topScores = JSON.parse(localStorage.topScores);
-           //console.log(localStorage);
          }
 
          //volume button controls
@@ -344,7 +343,6 @@ var Game = {
           ledge.y -=  (600 + 100);
 
           ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
-          console.log(ledge.y);
           //ledge.body.collideWorldBounds = true;
 
 
