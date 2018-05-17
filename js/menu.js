@@ -94,7 +94,6 @@ var Menu = {
 
     update: function(){
         if (this.spaceKey.isDown) {
-        console.log('pffff');
         this.startGame();
         }
     },
