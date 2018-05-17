@@ -515,13 +515,13 @@ var Game = {
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + (platformPool.children[5].width/2) -20;
+        x = platformPool.children[5].x + (platformPool.children[5].width/2) -31;//<< changed from -20
         y = platformPool.children[5].y -17;
 
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
-        spring.scale.setTo(.3);
+        spring.scale.setTo(.2); //<< changed from 0.3
 
         //enable body on spring and make them unmovable
         game.physics.arcade.enable(spring);
