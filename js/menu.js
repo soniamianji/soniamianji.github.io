@@ -33,15 +33,17 @@ var Menu = {
         //parse the saved scores
         if (localStorage.topScores !== undefined) {
             topScores = JSON.parse(localStorage.topScores);
-            //console.log(localStorage);
-         }
+        }
 
         //display highest score
-        var highestScoreText = game.add.text(165, 158, topScores[0], {
-            fontSize: "24px",
-            fill: 'red',
-            align: "center",
+        var highestScoreText = game.add.text(165, 160, ":"+topScores[0], {
+          fontSize: "14px",
+          fill: '#ff0000',
+          align: "center",
+          font: 'Press Start 2P',
+          lineHeight: 400
         });
+        console.log(highestScoreText.lineSpacing);
         highestScoreText.anchor.set(0.5, 0.5);
 
         //volume button controls

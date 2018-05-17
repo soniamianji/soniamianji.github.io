@@ -30,30 +30,33 @@ var gameover = {
         }
 
         //top scores title
-        var highScoreText = game.add.text(150, 330, "Top Scores:", {
-          fontSize: "20px",
+        var highScoreText = game.add.text(150, 310, "Top Scores:", {
+          fontSize: "14px",
           fill: '#ff0000',
           align: "center",
+          font: 'Press Start 2P'
         });
         highScoreText.anchor.set(0.5, 0.5);
 
         //actual top scores
-        var yPos = 360;
+        var yPos = 340;
         for (var i = 0; i < topScores.length; i++) {
             boop = game.add.text(150,yPos,topScores[i], {
-            fontSize: "20px",
+            fontSize: "16px",
             fill: '#ff0000',
             align: "center",
+            font: 'Press Start 2P'
           });
           boop.anchor.set(0.5, 0.5);
           yPos += 30
         }
 
         //last score text
-        var lastScoreText = game.add.text(150, 290, "Score: " + score, {
-            fontSize: "30px",
+        var lastScoreText = game.add.text(150, 270, "Score:" + score, {
+            fontSize: "18px",
             fill: '#ff0000',
             align: "center",
+            font: 'Press Start 2P'
         });
         lastScoreText.anchor.set(0.5, 0.5);
 

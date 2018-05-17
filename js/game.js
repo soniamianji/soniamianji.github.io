@@ -581,10 +581,11 @@ var Game = {
     //print the score
     updateScore: function() {
         scoreText.destroy();
-        scoreText = game.add.text(14, 4, "score: "+score, {
-            fontSize: "20px",
+        scoreText = game.add.text(14, 8, "Score:"+score, {
+            fontSize: "12px",
             fill: '#ff0000',
             align: "center",
+            font: 'Press Start 2P'
         });
         scoreText.anchor.set(0, 0)
         scoreText.fixedToCamera = true;
