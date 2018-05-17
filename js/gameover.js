@@ -30,9 +30,9 @@ var gameover = {
         }
 
         //top scores title
-        var highScoreText = game.add.text(150, 310, "Top Scores:", {
+        var highScoreText = game.add.text(155, 300, "\nTop Scores:", {
           fontSize: "14px",
-          fill: '#ff0000',
+          fill: '#ea302b',
           align: "center",
           font: 'Press Start 2P'
         });
@@ -41,9 +41,9 @@ var gameover = {
         //actual top scores
         var yPos = 340;
         for (var i = 0; i < topScores.length; i++) {
-            boop = game.add.text(150,yPos,topScores[i], {
+            boop = game.add.text(150,yPos,i+1+"."+topScores[i], {
             fontSize: "16px",
-            fill: '#ff0000',
+            fill: '#ea302b',
             align: "center",
             font: 'Press Start 2P'
           });
@@ -54,7 +54,7 @@ var gameover = {
         //last score text
         var lastScoreText = game.add.text(150, 270, "Score:" + score, {
             fontSize: "18px",
-            fill: '#ff0000',
+            fill: '#ea302b',
             align: "center",
             font: 'Press Start 2P'
         });

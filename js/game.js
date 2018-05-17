@@ -583,7 +583,7 @@ var Game = {
         scoreText.destroy();
         scoreText = game.add.text(14, 8, "Score:"+score, {
             fontSize: "12px",
-            fill: '#ff0000',
+            fill: '#ea302b',
             align: "center",
             font: 'Press Start 2P'
         });

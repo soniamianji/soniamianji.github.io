@@ -36,14 +36,12 @@ var Menu = {
         }
 
         //display highest score
-        var highestScoreText = game.add.text(165, 160, ":"+topScores[0], {
-          fontSize: "14px",
-          fill: '#ff0000',
-          align: "center",
+        var highestScoreText = game.add.text(165, 150, "\n:"+topScores[0], {
           font: 'Press Start 2P',
-          lineHeight: 400
+          fontSize: "14px",
+          fill: '#ea302b',
+          align: "center"
         });
-        console.log(highestScoreText.lineSpacing);
         highestScoreText.anchor.set(0.5, 0.5);
 
         //volume button controls
