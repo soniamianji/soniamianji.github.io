@@ -86,6 +86,17 @@ var Menu = {
           mute.inputEnabled = true;
           mute.events.onInputDown.add(soundOFF, this);
         }
+
+        this.spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR ]);
+
+    },
+
+    update: function(){
+        if (this.spaceKey.isDown) {
+        console.log('pffff');
+        this.startGame();
+        }
     },
 
     startGame: function () {
