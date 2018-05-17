@@ -93,6 +93,16 @@ var Game = {
     },
 
     create: function(){
+
+      //physic enabled
+      game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      //creating group for the stones
+      stonesPool = game.add.group();
+      //enableing physics on them
+      game.physics.arcade.enable(stonesPool);
+      stonesPool.enableBody = true;
+
         // should be reset on restart of the game
         MaxCameraY = 0;
 
@@ -111,8 +121,7 @@ var Game = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
-        //physic enabled
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+
         this.generatePlatforms();
         this.generateStones();
         this.generateSpring();
@@ -244,10 +253,12 @@ var Game = {
     {
         game.camera.y = MaxCameraY;
 
+
     }
 
 /********************* FIREBALL ********************/
 /****************************************************/
+
   if (timerBall==0) {
     // generate a random spawn frequency number the fireballs
     raSpawn = Math.floor(Math.random() * 6);
@@ -272,7 +283,6 @@ var Game = {
     }
   }
 
-
 /********************* COLLISIONS ********************/
 /****************************************************/
 
@@ -293,7 +303,7 @@ var Game = {
      //stones with platform collision
     for (var i = 0; i < stonesPool.children.length; i++) {
       //dont move overlapping platform if ledges start moving
-      if (score < 100) {
+      if (score < 20) {
         //ceck for every stone in the stones pool and move it if it overlaps
          stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
          if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
@@ -542,13 +552,6 @@ var Game = {
 
     //generate the stones to collect
     generateStones: function() {
-
-      //grouping the stones
-     stonesPool = game.add.group();
-     //enableing physics on them
-     game.physics.arcade.enable(stonesPool);
-     stonesPool.enableBody = true;
-
      //create 20 stones
      stonesDistance = 0;
 
@@ -571,7 +574,7 @@ var Game = {
     collectStone: function(player, redStone) {
       collect.play();
       score+=10;
-      redStone.kill();
+      redStone.destroy();
     },
 
 /********************* SCORE **********************/
