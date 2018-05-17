@@ -62,14 +62,16 @@ var gameover = {
 
         //volume button controls
         if (game.sound.volume==1) {
-          mute = this.game.add.sprite(270,4,"mute");
+          mute = this.game.add.sprite(270,8,"mute");
           mute.anchor.set(0, 0);
+          mute.scale.setTo(0.7);
           mute.fixedToCamera = true;
           mute.inputEnabled = true;
           mute.events.onInputDown.add(soundOFF, this);
         } else if (game.sound.volume==0) {
-          unmute = this.game.add.sprite(270,4,"unmute");
+          unmute = this.game.add.sprite(270,8,"unmute");
           unmute.anchor.set(0, 0);
+          unmute.scale.setTo(0.7);
           unmute.fixedToCamera = true;
           unmute.inputEnabled = true;
           unmute.events.onInputDown.add(soundON, this);
@@ -80,8 +82,9 @@ var gameover = {
 
           mute.destroy();
 
-          unmute = this.game.add.sprite(270,4,"unmute");
+          unmute = this.game.add.sprite(270,8,"unmute");
           unmute.anchor.set(0, 0);
+          unmute.scale.setTo(0.7);
           unmute.fixedToCamera = true;
           unmute.inputEnabled = true;
           unmute.events.onInputDown.add(soundON, this);
@@ -92,8 +95,9 @@ var gameover = {
 
           unmute.destroy();
 
-          mute = this.game.add.sprite(270,4,"mute");
+          mute = this.game.add.sprite(270,8,"mute");
           mute.anchor.set(0, 0);
+          mute.scale.setTo(0.7);
           mute.fixedToCamera = true;
           mute.inputEnabled = true;
           mute.events.onInputDown.add(soundOFF, this);
