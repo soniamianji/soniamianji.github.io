@@ -63,7 +63,7 @@
 
 //global variables
 
-var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,bg,
+var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,background,
  spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
  fireBall, raSpawn, hitSpring, initialWorldHeight, mute, unmute, pause_label,timerBall;
 
@@ -94,6 +94,12 @@ var Game = {
 
     create: function(){
 
+     //bg
+     background = game.add.image(0,0,'background');
+     background.scale.setTo(0.5);
+     background.fixedToCamera = true;
+     
+
       //physic enabled
       game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -111,7 +117,7 @@ var Game = {
         collect = game.add.audio('collect');
         springSound = game.add.audio('springSound');
         bgMusic = game.add.audio('bgMusic');
-        bgMusic.play();
+       bgMusic.play();
         bgMusic.loopFull();
 
         //scaling options
@@ -121,7 +127,7 @@ var Game = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
-
+        
         this.generatePlatforms();
         this.generateStones();
         this.generateSpring();
@@ -215,6 +221,8 @@ var Game = {
 
     update: function(){
 
+      
+     
       fpsCounter++;
       if (timerBall > 0) {
         timerBall--;
@@ -232,6 +240,7 @@ var Game = {
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
     game.world.setBounds(null ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
+  
 
 
     /*********************CAMERA**************/
@@ -295,7 +304,7 @@ var Game = {
     var hitBall = game.physics.arcade.collide(player, fireBall);
 
     if (hitBall) {
-      this.gameOverScore();
+    this.gameOverScore();
       console.log("death reason : hitBall");
     }
 
@@ -363,7 +372,7 @@ var Game = {
 
         
         }
-            if (score >20){
+            if (score >100){
              
             ledge.body.velocity.setTo(50,0);
             game.world.wrap(ledge,0,false,true,false);
@@ -383,7 +392,7 @@ var Game = {
               if (score > 400 )
               {
 
-              ledge.body.velocity.setTo((score-200),0) ;
+              ledge.body.velocity.setTo(200,0) ;
               ledge.body.collideWorldBounds = false;
               game.world.wrap(ledge,0,false,true,false);
               
@@ -434,6 +443,7 @@ var Game = {
      //if the player falls in the fire game is over
      if (player.y > game.camera.y + game.camera.height || player.y > flames.y)
      {
+       
        this.gameOverScore();
        console.log('death reason: burned ');
      }
@@ -538,6 +548,7 @@ var Game = {
       platform.springLocked = true;
     },
 
+   
   /********************* STONES ********************/
   /**************************************************/
 
@@ -600,6 +611,8 @@ var Game = {
       this.state.start('gameover');
       bgMusic.stop();
     },
+
+    
 
 
 };
