@@ -98,7 +98,7 @@ var Game = {
      background = game.add.tileSprite(0,0,300,500,'background');
      //background.scale.setTo(0.5);
      background.fixedToCamera = true;
-     
+
 
       //physic enabled
       game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -127,7 +127,7 @@ var Game = {
         game.scale.pageAlignHorizontally = true;
         game.scale.pageAlignVertically = true;
 
-        
+
         this.generatePlatforms();
         this.generateStones();
         this.generateSpring();
@@ -221,8 +221,8 @@ var Game = {
 
     update: function(){
       background.tilePosition.y +=1;
-      
-     
+
+
       fpsCounter++;
       if (timerBall > 0) {
         timerBall--;
@@ -240,7 +240,7 @@ var Game = {
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
     game.world.setBounds(null ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
-  
+
 
 
     /*********************CAMERA**************/
@@ -365,22 +365,22 @@ var Game = {
 
           ledge.y -=  (600 + 50);
 
-          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);        
+          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
         }
             if (score > 100){
-             
+
             ledge.body.velocity.setTo(50,0);
             game.world.wrap(ledge,ledge.width/2,false,true,false);
             ledge.body.collideWorldBounds = false;
-            
-            }  
+
+            }
 
               if (score > 300 )
               {
               ledge.body.velocity.setTo(100,0) ;
               ledge.body.collideWorldBounds = false;
               game.world.wrap(ledge,0,false,true,false);
-              
+
               }
               if (score > 500 )
               {
@@ -388,13 +388,13 @@ var Game = {
               ledge.body.velocity.setTo(200,0) ;
               ledge.body.collideWorldBounds = false;
               game.world.wrap(ledge,0,false,true,false);
-              
+
               }
 
       },this);
 
 
-     
+
 
 
 /********************* MOVEMENT ********************/
@@ -436,7 +436,7 @@ var Game = {
      //if the player falls in the fire game is over
      if (player.y > game.camera.y + game.camera.height || player.y > flames.y)
      {
-       
+
        this.gameOverScore();
        console.log('death reason: burned ');
      }
@@ -506,7 +506,7 @@ var Game = {
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
         ledge.scale.setTo(0.09,0.09);
-        
+
         ledge.body.immovable = true;
         ledge.width = 70;
      }
@@ -519,13 +519,13 @@ var Game = {
     generateSpring: function() {
       if (hitSpring == false) {
         //get platform coordinates
-        x = platformPool.children[5].x + (platformPool.children[5].width/2) -31;//<< changed from -20
+        x = platformPool.children[5].x + (platformPool.children[5].width/2) -10;
         y = platformPool.children[5].y -17;
 
 
         //add spring and scale it
         spring = game.add.sprite(x ,y ,'spring');
-        spring.scale.setTo(.2); //<< changed from 0.3
+        spring.scale.setTo(.3);
 
         //enable body on spring and make them unmovable
         game.physics.arcade.enable(spring);
@@ -541,7 +541,7 @@ var Game = {
       platform.springLocked = true;
     },
 
-   
+
   /********************* STONES ********************/
   /**************************************************/
 
@@ -605,7 +605,7 @@ var Game = {
       bgMusic.stop();
     },
 
-    
+
 
 
 };
