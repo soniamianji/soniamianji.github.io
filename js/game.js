@@ -220,7 +220,7 @@ var Game = {
         },
 
     update: function(){
-      background.tilePosition.y +=2;
+      background.tilePosition.y +=1;
       
      
       fpsCounter++;
@@ -370,7 +370,7 @@ var Game = {
             if (score > 100){
              
             ledge.body.velocity.setTo(50,0);
-            game.world.wrap(ledge,0,false,true,false);
+            game.world.wrap(ledge,ledge.width/2,false,true,false);
             ledge.body.collideWorldBounds = false;
             
             }  
