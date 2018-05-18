@@ -41,7 +41,7 @@ var gameover = {
         //actual top scores
         var yPos = 340;
         for (var i = 0; i < topScores.length; i++) {
-            boop = game.add.text(150,yPos,i+1+"."+topScores[i], {
+            boop = game.add.text(150,yPos,i+1+"."+ " " + topScores[i], {
             fontSize: "16px",
             fill: '#ea302b',
             align: "center",
