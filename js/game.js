@@ -95,8 +95,8 @@ var Game = {
     create: function(){
 
      //bg
-     background = game.add.image(0,0,'background');
-     background.scale.setTo(0.5);
+     background = game.add.tileSprite(0,0,300,500,'background');
+     //background.scale.setTo(0.5);
      background.fixedToCamera = true;
      
 
@@ -220,7 +220,7 @@ var Game = {
         },
 
     update: function(){
-
+      background.tilePosition.y +=2;
       
      
       fpsCounter++;
