@@ -231,7 +231,7 @@ var Game = {
 
          //setBounds(x, y, width, height)
             //Updates the size of this world and sets World.x/y to the given values
-    game.world.setBounds(0 ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
+    game.world.setBounds(null ,-player.changingYPos, game.world.width  ,initialWorldHeight + player.changingYPos);
 
 
     /*********************CAMERA**************/
@@ -354,61 +354,45 @@ var Game = {
 
         if( ledge.y >= game.camera.y+game.camera.height ){
 
-          ledge.y -=  (600 + 100);
+          ledge.y -=  (600 + 50);
 
           ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
-          //ledge.body.collideWorldBounds = true;
+         
 
 
 
+        
         }
-
             if (score >20){
+             
+            ledge.body.velocity.setTo(50,0);
+            game.world.wrap(ledge,0,false,true,false);
+            ledge.body.collideWorldBounds = false;
+            
 
-              ledge.body.velocity.setTo(100,0);
-              game.world.wrap(ledge,10,false,true,false);
-              ledge.body.collideWorldBounds = false;
-             /*if(ledge.body.velocity.x == 50|| ledge.body.velocity.x == -50){
-                console.log('got it til here');
-                console.log(ledge.x);
+          
+            }  
 
-                           if( ledge.body.velocity.x == 50 && ledge.x >200){
-                            ledge.body.velocity.setTo(-50,0);
-                            }
-                            if(ledge.body.velocity.x == -50 && ledge.x < 0){
-
-                              ledge.body.velocity.setTo(50,0);
-
-                            }}/*
-
-             console.log(ledge.body.velocity.x);*/
-
-
-            // game.world.wrap(ledge,0,false,true,false);
-             //ledge.body.collideWorldBounds = false;
-            //ledge.body.collideWorldBounds = true;
-
-              //ledge.body.bounce.set(1);
-              }
-
-             /* if (score > 200 )
+              if (score > 200 )
               {
               ledge.body.velocity.setTo(100,0) ;
-              ledge.body.collideWorldBounds = true;
-              ledge.body.bounce.set(1);
+              ledge.body.collideWorldBounds = false;
+              game.world.wrap(ledge,0,false,true,false);
+              
               }
-              if (score > 300 )
+              if (score > 400 )
               {
 
-              ledge.body.velocity.setTo(250,0) ;
-              ledge.body.collideWorldBounds = true;
-              ledge.body.bounce.set(1);
-              }*/
+              ledge.body.velocity.setTo((score-200),0) ;
+              ledge.body.collideWorldBounds = false;
+              game.world.wrap(ledge,0,false,true,false);
+              
+              }
 
       },this);
 
 
-
+     
 
 
 /********************* MOVEMENT ********************/
@@ -488,7 +472,7 @@ var Game = {
     },
 
     createPlayer: function(){
-        player = game.add.sprite(platformPool.children[3].x, platformPool.children[3].y-100, 'hero');
+        player = game.add.sprite(platformPool.children[3].x +5, platformPool.children[3].y-100, 'hero');
         player.animations.add('right',[0,1,2,3,4,5,6,7,8,9],false);
         player.animations.add('left',[10,11,12,13,14,15,16,17,18,19],false);
 
@@ -513,12 +497,13 @@ var Game = {
        platformPool.enableBody = true;
        //creating 10
 
-     for (var i= 0; i < 7; i++){
-        var randomX =game.rnd.integerInRange(0, game.world.width -70);
-        var randomY = initialWorldHeight- 100 *i;
+     for (var i= 0; i < 12; i++){
+        var randomX =game.rnd.integerInRange(0, game.world.width -70 );
+        var randomY = initialWorldHeight - 50 *i;
         ledge =  game.add.sprite(randomX,randomY,'base');
         platformPool.add(ledge);
         ledge.scale.setTo(0.09,0.09);
+        
         ledge.body.immovable = true;
         ledge.width = 70;
      }
