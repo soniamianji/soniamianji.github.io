@@ -14,6 +14,7 @@ var gameover = {
 
       // Create button to start game like in Menu
       var goImage = this.add.button(0, 0, 'gameover', this.startGame, this);
+      goImage.scale.setTo(0.5);
 
       // add the skull animation
       var skull = game.add.sprite(83, 40, 'skull');
