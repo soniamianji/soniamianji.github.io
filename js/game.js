@@ -365,31 +365,24 @@ var Game = {
 
           ledge.y -=  (600 + 50);
 
-          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
-         
-
-
-
-        
+          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);        
         }
-            if (score >100){
+            if (score > 100){
              
             ledge.body.velocity.setTo(50,0);
             game.world.wrap(ledge,0,false,true,false);
             ledge.body.collideWorldBounds = false;
             
-
-          
             }  
 
-              if (score > 200 )
+              if (score > 300 )
               {
               ledge.body.velocity.setTo(100,0) ;
               ledge.body.collideWorldBounds = false;
               game.world.wrap(ledge,0,false,true,false);
               
               }
-              if (score > 400 )
+              if (score > 500 )
               {
 
               ledge.body.velocity.setTo(200,0) ;
