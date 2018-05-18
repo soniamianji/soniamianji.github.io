@@ -361,11 +361,13 @@ var Game = {
 
 
 
-
+        }
 
             if (score >20){
 
-              ledge.body.velocity.setTo(50,0);
+              ledge.body.velocity.setTo(100,0);
+              game.world.wrap(ledge,10,false,true,false);
+              ledge.body.collideWorldBounds = false;
              /*if(ledge.body.velocity.x == 50|| ledge.body.velocity.x == -50){
                 console.log('got it til here');
                 console.log(ledge.x);
@@ -384,12 +386,12 @@ var Game = {
 
             // game.world.wrap(ledge,0,false,true,false);
              //ledge.body.collideWorldBounds = false;
-            ledge.body.collideWorldBounds = true;
+            //ledge.body.collideWorldBounds = true;
 
-              ledge.body.bounce.set(1);
+              //ledge.body.bounce.set(1);
               }
 
-              if (score > 200 )
+             /* if (score > 200 )
               {
               ledge.body.velocity.setTo(100,0) ;
               ledge.body.collideWorldBounds = true;
@@ -401,9 +403,9 @@ var Game = {
               ledge.body.velocity.setTo(250,0) ;
               ledge.body.collideWorldBounds = true;
               ledge.body.bounce.set(1);
-              }
+              }*/
 
-      }},this);
+      },this);
 
 
 
