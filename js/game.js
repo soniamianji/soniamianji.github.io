@@ -365,7 +365,7 @@ var Game = {
 
           ledge.y -=  (600 + 50);
 
-          ledge.x = game.rnd.integerInRange(0, game.world.width - 70);
+          ledge.x = game.rnd.integerInRange(0,3) * 70;
         }
             if (score > 100){
 
