@@ -33,16 +33,33 @@ var Menu = {
         //parse the saved scores
         if (localStorage.topScores !== undefined) {
             topScores = JSON.parse(localStorage.topScores);
-        }
 
+<<<<<<< HEAD
+            //display highest score
+            var highestScoreText = game.add.text(142, 126, "\n:"+topScores[0], {
+              font: 'Press Start 2P',
+              fontSize: "14px",
+              fill: '#ea302b',
+              align: "center"
+            });
+        } else {
+            var highestScoreText = game.add.text(142, 126, "\n:0", {
+              font: 'Press Start 2P',
+              fontSize: "14px",
+              fill: '#ea302b',
+              align: "center"
+            });
+        }
+=======
         //display highest score
-        var highestScoreText = game.add.text(165, 147, "\n:"+topScores[0], {
+        var highestScoreText = game.add.text(165, 147, "\n:"+ topScores[0], {
           font: 'Press Start 2P',
           fontSize: "14px",
           fill: '#ea302b',
           align: "center"
         });
         highestScoreText.anchor.set(0.5, 0.5);
+>>>>>>> 3743737bfb4b05372fbb6cae84df9f6710cbb566
 
         //volume button controls
         if (game.sound.volume==1) {
