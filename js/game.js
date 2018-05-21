@@ -74,6 +74,7 @@ var goLeft = false;
 
 var Game = {
 
+        //preloading the assets
     preload: function(){
         game.load.spritesheet('hero','./assets/images/hero.png', 125,200,19);
         game.load.spritesheet('flames', './assets/images/flames_sprite.png', 600, 221, 3);
@@ -96,7 +97,6 @@ var Game = {
 
      //bg
      background = game.add.tileSprite(0,0,300,500,'background');
-     //background.scale.setTo(0.5);
      background.fixedToCamera = true;
 
 
@@ -109,7 +109,7 @@ var Game = {
       game.physics.arcade.enable(stonesPool);
       stonesPool.enableBody = true;
 
-        // should be reset on restart of the game
+        //to keep track of minimum camera y
         MaxCameraY = 0;
 
         //sounds
@@ -117,7 +117,7 @@ var Game = {
         collect = game.add.audio('collect');
         springSound = game.add.audio('springSound');
         bgMusic = game.add.audio('bgMusic');
-       bgMusic.play();
+        bgMusic.play();
         bgMusic.loopFull();
 
         //scaling options
@@ -157,6 +157,7 @@ var Game = {
             if (game.sound.volume==1) { mute.revive() } else if (game.sound.volume==0) { unmute.revive() }
           }
         }
+
          //  Our controls.
          cursors = game.input.keyboard.createCursorKeys();
 
@@ -194,7 +195,6 @@ var Game = {
            unmute.events.onInputDown.add(soundON, this);
          }
 
-
          function soundOFF() {
            game.sound.volume = 0;
            mute.destroy();
@@ -216,12 +216,11 @@ var Game = {
            mute.inputEnabled = true;
            mute.events.onInputDown.add(soundOFF, this);
          }
-
         },
 
     update: function(){
+      //scrolling bg
       background.tilePosition.y +=1;
-
 
       fpsCounter++;
       if (timerBall > 0) {
@@ -250,7 +249,7 @@ var Game = {
     if (game.camera.y < MaxCameraY)
     {
         MaxCameraY = game.camera.y;
-//        console.log(score);
+
 
         /*********************SCORE****************/
            //update score
@@ -302,7 +301,6 @@ var Game = {
   /********************* FIREBALL COLLISION ********************/
 
     var hitBall = game.physics.arcade.collide(player, fireBall);
-
     if (hitBall) {
     this.gameOverScore();
       console.log("death reason : hitBall");
@@ -316,7 +314,7 @@ var Game = {
      //stones with platform collision
     for (var i = 0; i < stonesPool.children.length; i++) {
       //dont move overlapping platform if ledges start moving
-      if (score < 20) {
+      if (score < 100) {
         //ceck for every stone in the stones pool and move it if it overlaps
          stoneCheck = Game.physics.arcade.overlap(stonesPool.children[i],platformPool);
          if (stoneCheck) stonesPool.children[i].x = game.rnd.integerInRange(20, game.world.width - 20);
@@ -330,7 +328,6 @@ var Game = {
 
 
     /********************* PLATFORM COLLISION ********************/
-
     //platform Collision
     var hitPlatform = game.physics.arcade.collide(player, platformPool);
 
@@ -346,7 +343,6 @@ var Game = {
       player.body.velocity.y = -600;
       player.body.gravity.y = 400;
       springSound.play();
-      //this.collapseSpring();
     }
 
     //spring-platform Collision
@@ -418,7 +414,7 @@ var Game = {
 
      }
       //Allow the player to jump if they are touching the ground.
-     if ( player.body.touching.down && (!hitSpring) && hitPlatform /*|| hitBase*/)
+     if ( player.body.touching.down && (!hitSpring) && hitPlatform )
      {
          player.body.velocity.y = -300;
          player.body.gravity.y = 400;
@@ -429,7 +425,8 @@ var Game = {
      game.world.wrap(player,0,true,true,false);
 
       // track the maximum amount that the player has travelled
-      //math.abs gets the whole number, we deduct the starting y pos from the player .y to see how much it has travelled and later compare that
+      //math.abs gets a whole number, we deduct the starting y pos from the player.y to see how much 
+      //it has travelled and later compare that
       //the last stored changinypos, and we set the changing y pos
       player.changingYPos = Math.max( player.changingYPos, Math.abs( player.y - player.startYPos) );
 
@@ -438,15 +435,13 @@ var Game = {
      {
 
        this.gameOverScore();
-       console.log('death reason: burned ');
+       //console.log('death reason: burned ');
      }
-
-
      //call function to print updated score
      this.updateScore();
-
-
     },
+
+
 
     preRender: function() {
 
@@ -461,6 +456,9 @@ var Game = {
         spring.y = this.lockedTo.y - 17;
       }
     },
+
+
+
 
 /********************* PLAYER & PLATFROMS & FIRE ********************/
 /**************************************************/
@@ -604,8 +602,6 @@ var Game = {
       this.state.start('gameover');
       bgMusic.stop();
     },
-
-
 
 
 };
