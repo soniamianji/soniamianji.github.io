@@ -96,7 +96,7 @@ var Game = {
 
      //bg
      background = game.add.tileSprite(0,0,300,500,'background');
-     //background.scale.setTo(0.5);
+     background.scale.setTo(0.5);
      background.fixedToCamera = true;
 
 
