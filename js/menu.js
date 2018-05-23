@@ -34,7 +34,7 @@ var Menu = {
         if (localStorage.topScores !== undefined) {
             topScores = JSON.parse(localStorage.topScores);
 
-//<<<<<<< HEAD
+
             //display highest score
             var highestScoreText = game.add.text(142, 126, "\n:"+topScores[0], {
               font: 'Press Start 2P',
@@ -50,8 +50,7 @@ var Menu = {
               align: "center"
             });
         }
-//=======
-//>>>>>>> 3743737bfb4b05372fbb6cae84df9f6710cbb566
+
 
         //volume button controls
         if (game.sound.volume==1) {
