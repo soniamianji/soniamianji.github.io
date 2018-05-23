@@ -61,7 +61,7 @@
 
 
 
-//global variables
+//global variables :)
 
 var player,cursors, ledge,MaxCameraY,platformPool,yStorage,base,background,
  spring, stonesPool, flames, jump, collect, bgMusic, score, scoreText, fpsCounter, topScores,
