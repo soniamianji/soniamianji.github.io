@@ -3,11 +3,11 @@ var gameover = {
 
     preload : function() {
         // Load the needed image for this game screen.
-        game.load.image('gameover', '/assets/images/gameover.png');
-        game.load.audio('GOSound', '/assets/sounds/GO.mp3');
-        game.load.spritesheet('skull', '/assets/images/skull_sprite.png', 134, 118, 2)
-        game.load.image("mute", "/assets/images/mute.png");
-        game.load.image("unmute", "/assets/images/unmute.png");
+        game.load.image('gameover', 'assets/images/gameover.png');
+        game.load.audio('GOSound', 'assets/sounds/GO.mp3');
+        game.load.spritesheet('skull', 'assets/images/skull_sprite.png', 134, 118, 2)
+        game.load.image("mute", "assets/images/mute.png");
+        game.load.image("unmute", "assets/images/unmute.png");
     },
 
     create : function() {

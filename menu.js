@@ -6,14 +6,14 @@ var Menu = {
         //center
         this.game.scale.pageAlignHorizontally = true;this.game.scale.pageAlignVertically = true;this.game.scale.refresh();
         //load background image
-        game.load.image('menu', '/assets/images/menu.png');
+        game.load.image('menu', 'assets/images/menu.png');
         //load flame sprite sheet
-        game.load.spritesheet('flames', '/assets/images/flames_sprite.png', 600, 221, 3);
+        game.load.spritesheet('flames', 'assets/images/flames_sprite.png', 600, 221, 3);
         //load menu audio
-        game.load.audio('laughter', '/assets/sounds/devils_laugh.mp3');
+        game.load.audio('laughter', 'assets/sounds/devils_laugh.mp3');
 
-        game.load.image("mute", "/assets/images/mute.png");
-        game.load.image("unmute", "/assets/images/unmute.png");
+        game.load.image("mute", "assets/images/mute.png");
+        game.load.image("unmute", "assets/images/unmute.png");
 
     },
 

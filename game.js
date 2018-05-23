@@ -76,20 +76,20 @@ var Game = {
 
         //preloading the assets
     preload: function(){
-        game.load.spritesheet('hero','/assets/images/hero.png', 125,200,19);
-        game.load.spritesheet('flames', '/assets/images/flames_sprite.png', 600, 221, 3);
-        game.load.spritesheet('pause','/assets/images/pausePlay.png',245,512);
-        game.load.image('base', '/assets/images/skulls.png');
-        game.load.image('spring', '/assets/images/spring.png');
-        game.load.image('stone_red', '/assets/images/whiskey.png');
-        game.load.audio('jump', '/assets/sounds/jump.mp3');
-        game.load.audio('collect', '/assets/sounds/collect.mp3');
-        game.load.audio('springSound', '/assets/sounds/springSound.mp3');
-        game.load.audio('bgMusic', '/assets/sounds/bgMusic.mp3');
-        game.load.image("ball", '/assets/images/ball.png');
-        game.load.image("mute", "/assets/images/mute.png");
-        game.load.image("unmute", "/assets/images/unmute.png");
-        game.load.image('background', "/assets/images/background.png");
+        game.load.spritesheet('hero','assets/images/hero.png', 125,200,19);
+        game.load.spritesheet('flames', 'assets/images/flames_sprite.png', 600, 221, 3);
+        game.load.spritesheet('pause','assets/images/pausePlay.png',245,512);
+        game.load.image('base', 'assets/images/skulls.png');
+        game.load.image('spring', 'assets/images/spring.png');
+        game.load.image('stone_red', 'assets/images/whiskey.png');
+        game.load.audio('jump', 'assets/sounds/jump.mp3');
+        game.load.audio('collect', 'assets/sounds/collect.mp3');
+        game.load.audio('springSound', 'assets/sounds/springSound.mp3');
+        game.load.audio('bgMusic', 'assets/sounds/bgMusic.mp3');
+        game.load.image("ball", 'assets/images/ball.png');
+        game.load.image("mute", "assets/images/mute.png");
+        game.load.image("unmute", "assets/images/unmute.png");
+        game.load.image('background', "assets/images/background.png");
 
     },
 
